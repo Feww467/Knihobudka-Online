@@ -7,6 +7,16 @@ const app = express();
 const port = 3000;
 const prisma = new PrismaClient();
 
+const cors = require('cors');
+
+// Allow specific origin
+app.use(cors({
+  origin: 'https://knihobudka-online-production.up.railway.app',
+  credentials: true
+}));
+
+// Or allow all origins (less secure)
+app.use(cors());
 //Functions
 
 function authorsSplit(authors) {
