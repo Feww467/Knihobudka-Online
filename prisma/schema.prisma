@@ -12,7 +12,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://user:password@knihobudka-online-production.up.railway.app/:5432/booksdb?schema=public"
+  url      = "DATABASE_URL"
 }
 model books {
   bookId     Int       @id @default(autoincrement())
