@@ -25,6 +25,7 @@
     "content-type": "^1.0.5",
     "cookie": "^0.7.2",
     "cookie-signature": "^1.2.2",
+    "cors": "^2.8.5",
     "debug": "^4.4.1",
     "deepmerge-ts": "^7.1.5",
     "defu": "^6.1.4",
