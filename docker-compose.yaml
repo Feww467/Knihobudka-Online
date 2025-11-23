@@ -5,7 +5,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://user:password@localhost:5432/booksdb?schema=public
+      - DATABASE_URL=postgresql://user:password@localhost:5432/books?schema=public
     depends_on:
       db:
         condition: service_healthy
@@ -15,7 +15,7 @@ services:
   db:
     image: postgres:13
     environment:
-      - POSTGRES_DB=mydb
+      - POSTGRES_DB=db
       - POSTGRES_USER=postgres  # Use standard 'postgres' user
       - POSTGRES_PASSWORD=password
     ports:
