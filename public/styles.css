@@ -224,7 +224,7 @@ td input {
 }
 
 /* Mobile responsiveness */
-@media (max-width: 768px) {
+@media (orientation: portrait) or (max-width: 768px) {
     body {
         padding: 5px;
         font-size: 14px;
