@@ -153,7 +153,6 @@
                     console.error('Error adding book:', error);
             }};
             async function deleteBook(button) {
-                const baseURL = 'http://localhost:3000'
                 var row = button.parentNode.parentNode;
                 const id = row.getAttribute('id');
                 row.parentNode.removeChild(row);
@@ -181,7 +180,6 @@
                     <button id="deleteButton" onclick="deleteBook(this)">Odstranit</button>
                 `;}
             async function saveChanges(button) {
-                const baseURL = 'http://localhost:3000';
                 const row = button.parentNode.parentNode;
                 const bookId = row.id;
                 // Get values from input fields
