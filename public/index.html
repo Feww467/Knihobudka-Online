@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body onload="loadBooksIntoTable()">
+        <h1>Knihobudka Čtyřkoly</h1>
+        <div>
+            <form id="addBookForm">
+                <div class="form-row">
+                    Přijmení autora: 
+                    <input type="text" name="authorSurname" id="authorSurname" required>
+                    Jméno autora: 
+                    <input type="text" name="authorFirstName" id="authorFirstName" required>
+                </div>
+                <div class="form-row">
+                    Název knihy: 
+                    <input type="text" name="title" id="title" required>
+                    Rok vydání: 
+                    <input type="number" name="yearPublished" id="yearPublished" required>
+                </div>
+                <div class="form-single">
+                    ISBN: 
+                    <input type="text" name="isbn" id="isbn" required>
+                </div>
+                <button type="button" onclick="addBook()">Přidat knihu</button>
+            </form>
+            <div class="searchWindow">
+                <h2>Vyhledat v knihobudce:</h2><input type="text" id="searchInput" oninput="searchBooks(this.value)" placeholder="">
+            </div>
+        </div>
+        <div>
+            <table id="table">
+                <caption>Seznam knih v knihobudce</caption>
+                <tr>
+                <th id="surname">Přijmení</th>
+                <th id="name">Jméno</th>
+                <th>Název knihy</th>
+                <th>Rok vydání</th>
+                <th>ISBN</th>
+                <th id="actionsColumn">Akce</th>
+                </tr>
+            </table>
+        </div>
+        <script src="index.js"></script>
+        <script>
+            const baseURL = 'http://localhost:3000';
+            async function loadBooksIntoTable() {
+                const table = document.getElementById('table');
+                try {
+                    const response = await fetch(baseURL+'/api/books/show', {
+                        method: 'GET',
+                        headers: {
+                            "Content-Type": 'application/json'
+                        }
+                    });
+                    const currentBooks = await response.json();
+                    if (!currentBooks || currentBooks.length === 0) {
+                        alert('V knihobudce momentálně nejsou žádné knihy.');
+                        return;
+                    }
+                    currentBooks.forEach(book => {
+                        const row = table.insertRow();
+                        row.id = book.bookId;
+                        const cellSurname = row.insertCell(0);
+                        const cellName = row.insertCell(1);
+                        const cellTitle = row.insertCell(2);
+                        const cellYear = row.insertCell(3);
+                        const cellIsbn = row.insertCell(4);
+                        const cellDelete = row.insertCell(5);
+
+                        cellSurname.textContent = book.surname;
+                        cellName.textContent = book.name;
+                        cellTitle.textContent = book.title;
+                        cellYear.textContent = book.year;
+                        cellIsbn.textContent = book.isbn;
+                        cellDelete.innerHTML = `<button class="editButton" onclick="editRow(this)">Upravit</button><button onclick="deleteBook(this)">Odstranit</button>`;
+                    });
+
+                } catch (error) {
+                    // Handle any errors that occurred during the fetch
+                    console.error('Error loading books:', error);
+                    table.innerHTML = '<tr><td colspan="5">Načítaní knih z databáze bylo neúspěšné. Prosím, zkuste to později.</td></tr>';
+                }
+            }
+                            
+            async function addBook() {
+                var table = document.getElementById("table");
+                var surname = document.getElementById("addBookForm").elements["authorSurname"].value;
+                var name = document.getElementById("addBookForm").elements["authorFirstName"].value;
+                var title = document.getElementById("addBookForm").elements["title"].value; 
+                var yearPublished = document.getElementById("addBookForm").elements["yearPublished"].value;
+                var isbn = document.getElementById("addBookForm").elements["isbn"].value;
+
+                if (!title || !surname || !name || !yearPublished) {
+                    if (isbn) {
+                        const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
+                        book = await getBook.json();
+                        console.log(book);
+                        if (!book.name) {
+                            book.name = "";
+                        }
+                        if (!book.surname) {
+                            book.surname = book.name;
+                            book.name = "";
+                        }
+                        surname = book.surname;
+                        name = book.name;
+                        title = book.title;
+                        yearPublished = book.yearPublished;
+                        if (!title || !surname || !name || !yearPublished) {
+                            alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
+                            return}
+                    }
+                    else {
+                    alert('Vyplňte všechna pole nebo zadejte ISBN pro automatické vyplnění');
+                    return; // Stop the function
+                    }}
+                try {
+                    var row = table.insertRow(-1);
+                    var bookSurname = row.insertCell(0);
+                    var bookName = row.insertCell(1);
+                    var bookTitle = row.insertCell(2);
+                    var datePublished = row.insertCell(3);
+                    var bookIsbn = row.insertCell(4);
+                    var deleteBook = row.insertCell(5);
+                    deleteBook.innerHTML = `<button class="editButton" onclick="editRow(this)">Upravit</button><button onclick="deleteBook(this)">Odstranit</button>`;
+                    bookSurname.innerHTML = surname;
+                    bookName.innerHTML = name;
+                    bookTitle.innerHTML = title;
+                    datePublished.innerHTML = yearPublished;
+                    bookIsbn.innerHTML = isbn;
+                    const response = await fetch(baseURL+"/api/books/add", {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": 'application/json'
+                        },
+                        body: JSON.stringify({
+                            surname: surname,
+                            name: name,
+                            title: title,
+                            year: yearPublished,
+                            isbn: isbn
+                        })
+                    })
+                    const newItem = await response.json();
+                    row.id = newItem.bookId
+                    document.getElementById("addBookForm").reset();
+                } catch (error) {
+                    alert('Chyba při přidávání knihy. Zkuste to prosím znovu.');
+                    console.error('Error adding book:', error);
+            }};
+            async function deleteBook(button) {
+                const baseURL = 'http://localhost:3000'
+                var row = button.parentNode.parentNode;
+                const id = row.getAttribute('id');
+                row.parentNode.removeChild(row);
+                const res = await fetch(baseURL, {
+                    method: 'DELETE',
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                    })
+                })
+            }
+            function editRow(button) {
+                const row = button.parentNode.parentNode;
+                const bookId = row.id;
+                for (let i = 0; i < 5; i++) {
+                    const cell = row.cells[i];
+                    const currentValue = cell.textContent;
+                    cell.innerHTML = `<input type="text" value="${currentValue}">`;
+                }
+                const actionsCell = row.cells[5];
+                actionsCell.innerHTML = `
+                    <button class="saveButton" onclick="saveChanges(this)">Uložit</button>
+                    <button id="deleteButton" onclick="deleteBook(this)">Odstranit</button>
+                `;}
+            async function saveChanges(button) {
+                const baseURL = 'http://localhost:3000';
+                const row = button.parentNode.parentNode;
+                const bookId = row.id;
+                // Get values from input fields
+                const updatedData = {
+                    surname: row.cells[0].querySelector('input').value,
+                    name: row.cells[1].querySelector('input').value,
+                    title: row.cells[2].querySelector('input').value,
+                    year: row.cells[3].querySelector('input').value,
+                    isbn: row.cells[4].querySelector('input').value
+                };
+                try {
+                    // Send update to server
+                    const response = await fetch(baseURL + "/api/books/update", {
+                        method: 'PUT',
+                        headers: {
+                            "Content-Type": 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: bookId,
+                            ...updatedData
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        // Update table cells with new values
+                        for (let i = 0; i < 5; i++) {
+                            const cell = row.cells[i];
+                            cell.textContent = updatedData[Object.keys(updatedData)[i]];
+                        }
+                        
+                        // Restore edit and delete buttons
+                        const actionsCell = row.cells[5];
+                        actionsCell.innerHTML = `
+                            <button class="editButton" onclick="editRow(this)">Upravit</button>
+                            <button onclick="deleteBook(this)">Odstranit</button>
+                        `;
+                    } else {
+                        throw new Error('Failed to update book');
+                    }
+                } catch (error) {
+                    alert('Chyba při ukládání změn. Zkuste to prosím znovu.');
+                    console.error('Error saving changes:', error);
+                    cancelEditing(button);
+                }
+            }
+            function searchBooks(query) {
+                const table = document.getElementById('table');
+                const rows = table.getElementsByTagName('tr');
+                const lowerCaseQuery = query.toLowerCase();
+                
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    let rowContainsQuery = false;
+                    
+                    for (let j = 0; j < cells.length - 1; j++) {
+                        const cellText = cells[j].textContent.toLowerCase();
+                        if (cellText.includes(lowerCaseQuery)) {
+                            rowContainsQuery = true;
+                            break;
+                        }
+                    }
+                    
+                    if (rowContainsQuery) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

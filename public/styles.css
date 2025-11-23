@@ -1,0 +1,383 @@
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 10px;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Header */
+h1 {
+    text-align: center;
+    color: #2c5530;
+    margin: 15px 0;
+    font-size: 1.5rem;
+    padding: 0 10px;
+}
+
+/* Form styling */
+#addBookForm {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
+    align-items: center;
+}
+
+.form-row input {
+    flex: 1;
+}
+
+.form-single {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.form-single input {
+    flex: 1;
+}
+
+#addBookForm input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#addBookForm input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+#addBookForm button {
+    width: 100%;
+    padding: 14px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#addBookForm button:active {
+    background-color: #357abd;
+    transform: scale(0.98);
+}
+
+/* Table container */
+div:last-child {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+caption {
+    font-weight: bold;
+    padding: 15px;
+    font-size: 1.1rem;
+    color: #2c5530;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+th, td {
+    padding: 12px 8px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    word-wrap: break-word;
+}
+
+/* Column widths */
+th:nth-child(1), td:nth-child(1) { /* Prijmeni */
+    width: 15%;
+}
+
+th:nth-child(2), td:nth-child(2) { /* Jmeno */
+    width: 15%;
+}
+
+th:nth-child(3), td:nth-child(3) { /* Název knihy */
+    width: 30%;
+}
+
+th:nth-child(4), td:nth-child(4) { /* Rok vydani */
+    width: 10%;
+}
+
+th:nth-child(5), td:nth-child(5) { /* ISBN */
+    width: 15%;
+}
+
+th:nth-child(6), td:nth-child(6) { /* Akce */
+    width: 15%;
+    min-width: 120px;
+}
+
+/* Center the "Akce" header */
+th:nth-child(6) {
+    text-align: center;
+}
+
+/* Center the action buttons in the cells */
+td:nth-child(6) {
+    text-align: center;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    position: sticky;
+    top: 0;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Button styling in table */
+button {
+    padding: 8px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Edit button - Blue */
+.editButton {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.editButton:active {
+    background-color: #357abd;
+    transform: scale(0.95);
+}
+
+/* Save button - Green */
+.saveButton {
+    background-color: #28a745;
+    color: white;
+}
+
+.saveButton:active {
+    background-color: #218838;
+    transform: scale(0.95);
+}
+
+/* Delete button - Red */
+button:not(.editButton):not(.saveButton) {
+    background-color: #dc3545;
+    color: white;
+}
+
+button:not(.editButton):not(.saveButton):active {
+    background-color: #c82333;
+    transform: scale(0.95);
+}
+
+/* Input styling in edit mode */
+td input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 1.3rem;
+        margin: 10px 0;
+    }
+    
+    #addBookForm {
+        padding: 15px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .form-single {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .form-row input {
+        width: 100%;
+    }
+    
+    .form-row,
+    .form-single {
+        margin: 10px 0;
+    }
+    
+    #addBookForm input {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    th, td {
+        padding: 8px 6px;
+        font-size: 13px;
+    }
+    
+    /* Adjust column widths for mobile */
+    th:nth-child(1), td:nth-child(1),
+    th:nth-child(2), td:nth-child(2),
+    th:nth-child(3), td:nth-child(3),
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5),
+    th:nth-child(6), td:nth-child(6) {
+        width: auto;
+    }
+    
+    th:nth-child(6), td:nth-child(6) {
+        min-width: 100px;
+    }
+    
+    /* Keep Akce header centered on mobile */
+    th:nth-child(6) {
+        text-align: center;
+    }
+    
+    td:nth-child(6) {
+        text-align: center;
+    }
+    
+    button {
+        padding: 6px 8px;
+        font-size: 11px;
+        margin: 1px;
+    }
+    
+    caption {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2rem;
+    }
+    
+    #addBookForm {
+        padding: 12px;
+    }
+    
+    th, td {
+        padding: 6px 4px;
+        font-size: 12px;
+    }
+    
+    button {
+        padding: 5px 6px;
+        font-size: 10px;
+    }
+    
+    th:nth-child(6), td:nth-child(6) {
+        min-width: 90px;
+    }
+}
+
+/* Loading and error states */
+tr td[colspan] {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Focus styles for accessibility */
+button:focus, input:focus {
+    outline: 2px solid #4a90e2;
+    outline-offset: 2px;
+}
+
+/* Touch-friendly hover alternatives */
+@media (hover: hover) {
+    button:hover {
+        opacity: 0.9;
+    }
+    
+    tr:hover {
+        background-color: #e9ecef;
+    }
+}
+.searchWindow {
+    width: 100%;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+.searchWindow input, .searchWindow h2 {
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 16px;
+}
+.searchWindow h2 {
+    width: 200px;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+.searchWindow input {
+    width: calc(100% - 235px);
+    margin-left: 5px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
