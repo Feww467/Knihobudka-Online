@@ -2,6 +2,7 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { cons } from 'effect/List';
 import { all } from 'proxy-addr';
+import cors from 'cors';
 
 const app = express();
 const port = 3000;
