@@ -1,43 +1,25 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="google-site-verification" content="mZbF-tusWYS3aQx1lxEoTdt2zxgOIYigbnTLUTybDVc" />
         <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
     </head>
-    <body onload="loadBooksIntoTable()">
-        <h1>Knihobudka Čtyřkoly</h1>
+    <body>
+        <h1>Knihobudka online</h1>
+        <div id="map"></div>
         <div>
-            <form id="addBookForm">
-                <div class="form-row">
-                    Přijmení autora: 
-                    <input type="text" name="authorSurname" id="authorSurname" required>
-                    Jméno autora: 
-                    <input type="text" name="authorFirstName" id="authorFirstName" required>
-                </div>
-                <div class="form-row">
-                    Název knihy: 
-                    <input type="text" name="title" id="title" required>
-                    Rok vydání: 
-                    <input type="number" name="yearPublished" id="yearPublished" required>
-                </div>
-                <div class="form-single">
-                    ISBN: 
-                    <input type="text" name="isbn" id="isbn" required>
-                </div>
-                <button type="button" onclick="addBook()">Přidat knihu</button>
-            </form>
-            <div class="searchWindow">
-                <h2>Vyhledat v knihobudce:</h2><input type="text" id="searchInput" oninput="searchBooks(this.value)" placeholder="">
-            </div>
-        </div>
-        <div>
-            <table id="table">
-                <caption>Seznam knih v knihobudce</caption>
+            <table id="bookcaseTable">
+                <caption>Seznam knihobudek</caption>
                 <tr>
-                <th id="surname">Přijmení</th>
                 <th id="name">Jméno</th>
+                <th id="capacity">Jméno</th>
                 <th>Název knihy</th>
                 <th>Rok vydání</th>
                 <th>ISBN</th>
@@ -46,6 +28,13 @@
             </table>
         </div>
         <script src="index.js"></script>
+        <script name="map">
+            var map = L.map('map').setView([51.505, -0.09], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            var marker = L.marker([51.5, -0.09]).addTo(map);
+        </script>
         <script>
             const baseURL = 'https://knihobudka-online-production.up.railway.app';
             async function loadBooksIntoTable() {
