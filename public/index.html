@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -86,15 +85,19 @@
                     table.innerHTML = '<tr><td colspan="5">Načítaní knih z databáze bylo neúspěšné. Prosím, zkuste to později.</td></tr>';
                 }
             }
-                            
             async function addBook() {
                 var table = document.getElementById("table");
-                var surname = document.getElementById("addBookForm").elements["authorSurname"].value;
-                var name = document.getElementById("addBookForm").elements["authorFirstName"].value;
-                var title = document.getElementById("addBookForm").elements["title"].value; 
-                var yearPublished = document.getElementById("addBookForm").elements["yearPublished"].value;
-                var isbn = document.getElementById("addBookForm").elements["isbn"].value;
-
+                var bookForm = document.getElementById("addBookForm")
+                var surname = bookForm.elements["authorSurname"].value;
+                var name = bookForm.elements["authorFirstName"].value;
+                var title = bookForm.elements["title"].value; 
+                var yearPublished = bookForm.elements["yearPublished"].value;
+                var isbn = bookForm.elements["isbn"].value;
+                
+                if (isValidISBN(isbn) == false) {
+                        alert('ISBN není validní');
+                        return}
+                
                 if (!title || !surname || !name || !yearPublished) {
                     if (isbn) {
                         const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
