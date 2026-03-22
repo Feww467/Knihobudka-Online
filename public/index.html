@@ -94,7 +94,7 @@
                 var yearPublished = bookForm.elements["yearPublished"].value;
                 var isbn = bookForm.elements["isbn"].value;
                 
-                if (isValidISBN(isbn) == false) {
+                if (isValidISBN(isbn) == false) { //Calls a function, which returns, whether the ISBN provided is valid
                         alert('ISBN není validní');
                         return}
                 
