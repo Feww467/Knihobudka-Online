@@ -98,30 +98,24 @@
                         alert('ISBN není validní');
                         return}
                 
-                if (!title || !surname || !name || !yearPublished) {
-                    if (isbn) {
-                        const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
-                        book = await getBook.json();
-                        console.log(book);
-                        if (!book.name) {
-                            book.name = "";
-                        }
-                        if (!book.surname) {
-                            book.surname = book.name;
-                            book.name = "";
-                        }
-                        surname = book.surname;
-                        name = book.name;
-                        title = book.title;
-                        yearPublished = book.yearPublished;
-                        if (!title || !surname || !name || !yearPublished) {
-                            alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
-                            return}
+                if (!title || !surname || !name || !yearPublished) { // If any of the fields are empty, try to fetch book data using the provided ISBN
+                    const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
+                    book = await getBook.json();
+                    console.log(book);
+                    if (!book.name) { //Handles the cases of a single named author, where the API returns the name in the surname field and leaves the name field empty
+                        book.name = "";
                     }
-                    else {
-                    alert('Vyplňte všechna pole nebo zadejte ISBN pro automatické vyplnění');
-                    return; // Stop the function
-                    }}
+                    if (!book.surname) {
+                        book.surname = book.name;
+                        book.name = "";
+                    }
+                    surname = book.surname;
+                    name = book.name;
+                    title = book.title;
+                    yearPublished = book.yearPublished;
+                    if (!title || !surname || !name || !yearPublished) {
+                        alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
+                        return}}
                 try {
                     var row = table.insertRow(-1);
                     var bookSurname = row.insertCell(0);
