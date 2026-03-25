@@ -8,6 +8,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model books {
   bookId     Int       @id @default(autoincrement())
   shelfId    Int
@@ -18,6 +19,7 @@ model books {
   isbn       String
   deleted    Boolean   @default(false)
 }
+
 model bookshelfs {
   shelfId    Int       @id @default(autoincrement())
   osmId      String
