@@ -20,7 +20,7 @@ model books {
   surname    String
   name       String
   title      String
-  year       String
+  year       Int
   isbn       String
   deleted    Boolean   @default(false)
 }
