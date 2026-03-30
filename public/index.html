@@ -44,139 +44,219 @@
                 </tr>
             </table>
         </div>
-    <h1>📷 Barcode Scanner</h1>
+<h1>📚 Book Barcode Scanner</h1>
 
-    <div id="videoContainer">
-    <video id="video" autoplay muted playsinline></video>
-    <div id="scanBox"></div>
-    </div>
+<div id="videoContainer">
+<video id="video" autoplay muted playsinline></video>
+<div id="scanBox"></div>
+</div>
 
-    <canvas id="canvas"></canvas>
+<canvas id="canvas"></canvas>
 
-    <div>
-    <button onclick="startScanner()">Start Camera Scanner</button>
-    <button onclick="toggleTorch()">🔦 Toggle Flashlight</button>
-    </div>
+<div>
+<button onclick="startScanner()">Start Scanner</button>
+<button onclick="toggleTorch()">🔦 Flashlight</button>
+</div>
 
-    <div>
-    <input type="file" id="imageInput" accept="image/*" />
-    </div>
+<div>
+<input type="file" id="imageInput" accept="image/*" />
+</div>
 
-    <div id="status">Waiting for scan...</div>
+<div id="status">Waiting for scan...</div>
 
-    <h2>Scanned Results</h2>
-    <div id="results"></div>
+<h2>Scanned Books</h2>
+<div id="results"></div>
 
-    <script src="https://unpkg.com/@zxing/library@latest"></script>
+<script src="https://unpkg.com/@zxing/library@latest"></script>
 
-    <script>
-    const codeReader = new ZXing.BrowserMultiFormatReader();
-    const video = document.getElementById('video');
-    const status = document.getElementById('status');
-    const resultsContainer = document.getElementById('results');
-    const imageInput = document.getElementById('imageInput');
+<script>
+const hints = new Map();
+hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.EAN_13]);
+const codeReader = new ZXing.BrowserMultiFormatReader(hints);
 
-    let currentStream = null;
-    let torchOn = false;
+const video=document.getElementById('video');
+const status=document.getElementById('status');
+const results=document.getElementById('results');
+const imageInput=document.getElementById('imageInput');
 
-    function addResult(text, format){
-    const div = document.createElement('div');
-    div.className='resultItem';
-    div.textContent=`${format}: ${text}`;
-    resultsContainer.prepend(div);
+let currentStream=null;
+let torch=false;
+let scanned=new Set();
+
+function isBookBarcode(code){
+ return code.startsWith('978')||code.startsWith('979');
+}
+
+async function fetchBook(isbn){
+ try{
+  const res=await fetch(`https://openlibrary.org/isbn/${isbn}.json`);
+  if(!res.ok) throw new Error();
+
+  const data=await res.json();
+
+  let author="";
+
+  if(data.authors&&data.authors.length>0){
+   const a=await fetch(`https://openlibrary.org${data.authors[0].key}.json`);
+   const ad=await a.json();
+   author=ad.name;
+  }
+
+  const cover=`https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
+
+  addBook({
+   title:data.title,
+   author,
+   isbn,
+   cover
+  });
+
+ }catch{
+  addBook({
+   title:"Unknown Book",
+   author:"",
+   isbn,
+   cover:""
+  });
+ }
+}
+
+function addBook(book){
+ if(scanned.has(book.isbn)) return;
+ scanned.add(book.isbn);
+
+ const div=document.createElement('div');
+ div.className='book';
+
+ const img=document.createElement('img');
+ img.src=book.cover||"";
+
+ const info=document.createElement('div');
+ info.className='bookInfo';
+
+ const title=document.createElement('div');
+ title.textContent=book.title;
+
+ const author=document.createElement('div');
+ author.textContent=book.author;
+
+ const isbn=document.createElement('div');
+ isbn.className='isbn';
+ isbn.textContent=book.isbn;
+
+ info.appendChild(title);
+ info.appendChild(author);
+ info.appendChild(isbn);
+
+ div.appendChild(img);
+ div.appendChild(info);
+
+ results.prepend(div);
+}
+
+async function startScanner(){
+ status.textContent="Starting camera...";
+
+ try{
+
+  const stream=await navigator.mediaDevices.getUserMedia({
+   video:{facingMode:{ideal:'environment'},focusMode:'continuous'}
+  });
+
+  currentStream=stream;
+  video.srcObject=stream;
+
+  const track=stream.getVideoTracks()[0];
+
+  const capabilities=track.getCapabilities();
+
+  if(capabilities.focusMode){
+   try{
+    await track.applyConstraints({advanced:[{focusMode:'continuous'}]});
+   }catch{}
+  }
+
+  codeReader.decodeFromVideoElement(video,(result,err)=>{
+
+   if(result){
+
+    const code=result.text;
+
+    if(isBookBarcode(code)){
+     status.textContent="ISBN detected";
+     fetchBook(code);
+    }else{
+     status.textContent="Not a book barcode";
     }
 
-    async function startScanner(){
-    status.textContent='Starting camera...';
+   }
 
-    try{
+  });
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-    video:{
-        facingMode:{ideal:'environment'},
-        focusMode:'continuous'
-    }
-    });
+ }catch(err){
+  status.textContent="Camera error: "+err;
+ }
+}
 
-    currentStream = stream;
-    video.srcObject = stream;
+async function toggleTorch(){
+ if(!currentStream) return;
 
-    const track = stream.getVideoTracks()[0];
+ const track=currentStream.getVideoTracks()[0];
+ const cap=track.getCapabilities();
 
-    const capabilities = track.getCapabilities();
+ if(!cap.torch){
+  status.textContent="Torch not supported";
+  return;
+ }
 
-    if(capabilities.focusMode){
-    try{
-        await track.applyConstraints({
-        advanced:[{focusMode:'continuous'}]
-        });
-    }catch(e){}
-    }
+ torch=!torch;
 
-    video.addEventListener('loadedmetadata',()=>{
-    video.play();
-    });
+ try{
+  await track.applyConstraints({advanced:[{torch}]});
+ }catch(e){
+  status.textContent="Torch error";
+ }
+}
 
-    codeReader.decodeFromVideoElement(video,(result,err)=>{
-    if(result){
-        status.textContent='Barcode detected';
-        addResult(result.text,result.getBarcodeFormat());
-    }
-    });
+imageInput.addEventListener('change',async e=>{
 
-    }catch(err){
-    status.textContent='Camera error: '+err;
-    }
-    }
+ const file=e.target.files[0];
+ if(!file) return;
 
-    async function toggleTorch(){
-    if(!currentStream) return;
+ const img=new Image();
+ img.src=URL.createObjectURL(file);
 
-    const track=currentStream.getVideoTracks()[0];
-    const capabilities=track.getCapabilities();
+ img.onload=async()=>{
 
-    if(!capabilities.torch){
-    status.textContent='Torch not supported on this device';
-    return;
-    }
+  const canvas=document.getElementById('canvas');
+  const ctx=canvas.getContext('2d');
 
-    torchOn=!torchOn;
+  canvas.width=img.width;
+  canvas.height=img.height;
 
-    try{
-    await track.applyConstraints({advanced:[{torch:torchOn}]});
-    status.textContent=torchOn?'Flashlight ON':'Flashlight OFF';
-    }catch(e){
-    status.textContent='Torch error: '+e;
-    }
-    }
+  ctx.drawImage(img,0,0);
 
-    imageInput.addEventListener('change',async(event)=>{
-    const file=event.target.files[0];
-    if(!file) return;
+  try{
 
-    const img=new Image();
-    img.src=URL.createObjectURL(file);
+   const result=await codeReader.decodeFromCanvas(canvas);
 
-    img.onload=async()=>{
+   const code=result.text;
 
-    const canvas=document.getElementById('canvas');
-    const ctx=canvas.getContext('2d');
+   if(isBookBarcode(code)){
+    fetchBook(code);
+    status.textContent="Book detected from image";
+   }else{
+    status.textContent="Not a book barcode";
+   }
 
-    canvas.width=img.width;
-    canvas.height=img.height;
+  }catch{
+   status.textContent="No barcode found";
+  }
+ }
+});
 
-    ctx.drawImage(img,0,0);
+</script>
 
-    try{
-    const result=await codeReader.decodeFromCanvas(canvas);
-    addResult(result.text,result.getBarcodeFormat());
-    status.textContent='Image scanned successfully';
-    }catch(err){
-    status.textContent='No barcode found in image';
-    }
-    }
-    });
-    </script>
         <script src="index.js"></script>
         <script>
             const baseURL = 'https://knihobudka-online-production.up.railway.app';
