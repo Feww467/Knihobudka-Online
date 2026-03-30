@@ -5,7 +5,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://postgres:niPsZqQgMuPzYGRdRAEvouWdTjFIvOuO@postgres.railway.internal:5432/railway
+      - DATABASE_URL=postgresql://postgres:BUHwmUKSgyeYblOmPdoeXxNbJfTobCQz@postgres.railway.internal:5432/railway
     depends_on:
       db:
         condition: service_healthy
@@ -17,7 +17,7 @@ services:
     environment:
       - POSTGRES_DB=railway
       - POSTGRES_USER=postgres  # Use standard 'postgres' user
-      - POSTGRES_PASSWORD=niPsZqQgMuPzYGRdRAEvouWdTjFIvOuO  # Use the same password as in the DATABASE_URL for consistency
+      - POSTGRES_PASSWORD=BUHwmUKSgyeYblOmPdoeXxNbJfTobCQz  # Use the same password as in the DATABASE_URL for consistency
     ports:
       - "5432:5432"
     healthcheck:
