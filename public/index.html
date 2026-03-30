@@ -46,8 +46,12 @@
         </div>
     <h1>📷 Barcode Scanner</h1>
 
+    <div id="videoContainer">
     <video id="video" autoplay muted playsinline></video>
-    <canvas id="canvas" style="display:none"></canvas>
+    <div id="scanBox"></div>
+    </div>
+
+    <canvas id="canvas"></canvas>
 
     <div>
     <button onclick="startScanner()">Start Camera Scanner</button>
@@ -77,89 +81,102 @@
 
     function addResult(text, format){
     const div = document.createElement('div');
-    div.className = 'resultItem';
-    div.textContent = `${format}: ${text}`;
+    div.className='resultItem';
+    div.textContent=`${format}: ${text}`;
     resultsContainer.prepend(div);
     }
 
     async function startScanner(){
-    status.textContent = 'Starting camera...';
+    status.textContent='Starting camera...';
 
     try{
-        const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: 'environment' } }
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+    video:{
+        facingMode:{ideal:'environment'},
+        focusMode:'continuous'
+    }
+    });
+
+    currentStream = stream;
+    video.srcObject = stream;
+
+    const track = stream.getVideoTracks()[0];
+
+    const capabilities = track.getCapabilities();
+
+    if(capabilities.focusMode){
+    try{
+        await track.applyConstraints({
+        advanced:[{focusMode:'continuous'}]
         });
+    }catch(e){}
+    }
 
-        currentStream = stream;
-        video.srcObject = stream;
+    video.addEventListener('loadedmetadata',()=>{
+    video.play();
+    });
 
-        const track = stream.getVideoTracks()[0];
-
-        codeReader.decodeFromVideoElement(video, (result, err) => {
-        if(result){
-            status.textContent = 'Barcode detected';
-            addResult(result.text, result.getBarcodeFormat());
-        }
-        });
+    codeReader.decodeFromVideoElement(video,(result,err)=>{
+    if(result){
+        status.textContent='Barcode detected';
+        addResult(result.text,result.getBarcodeFormat());
+    }
+    });
 
     }catch(err){
-        status.textContent = 'Camera error: ' + err;
+    status.textContent='Camera error: '+err;
     }
     }
 
     async function toggleTorch(){
     if(!currentStream) return;
 
-    const track = currentStream.getVideoTracks()[0];
-    const capabilities = track.getCapabilities();
+    const track=currentStream.getVideoTracks()[0];
+    const capabilities=track.getCapabilities();
 
     if(!capabilities.torch){
-        status.textContent = 'Torch not supported on this device';
-        return;
+    status.textContent='Torch not supported on this device';
+    return;
     }
 
-    torchOn = !torchOn;
+    torchOn=!torchOn;
 
     try{
-        await track.applyConstraints({
-        advanced: [{ torch: torchOn }]
-        });
-
-        status.textContent = torchOn ? 'Flashlight ON' : 'Flashlight OFF';
-
+    await track.applyConstraints({advanced:[{torch:torchOn}]});
+    status.textContent=torchOn?'Flashlight ON':'Flashlight OFF';
     }catch(e){
-        status.textContent = 'Torch error: ' + e;
+    status.textContent='Torch error: '+e;
     }
     }
 
-    imageInput.addEventListener('change', async (event)=>{
-    const file = event.target.files[0];
+    imageInput.addEventListener('change',async(event)=>{
+    const file=event.target.files[0];
     if(!file) return;
 
-    const img = new Image();
-    img.src = URL.createObjectURL(file);
+    const img=new Image();
+    img.src=URL.createObjectURL(file);
 
-    img.onload = async ()=>{
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+    img.onload=async()=>{
 
-        canvas.width = img.width;
-        canvas.height = img.height;
+    const canvas=document.getElementById('canvas');
+    const ctx=canvas.getContext('2d');
 
-        ctx.drawImage(img,0,0);
+    canvas.width=img.width;
+    canvas.height=img.height;
 
-        try{
-        const result = await codeReader.decodeFromCanvas(canvas);
-        addResult(result.text, result.getBarcodeFormat());
-        status.textContent = 'Image scanned successfully';
-        }
-        catch(err){
-        status.textContent = 'No barcode found in image';
-        }
+    ctx.drawImage(img,0,0);
+
+    try{
+    const result=await codeReader.decodeFromCanvas(canvas);
+    addResult(result.text,result.getBarcodeFormat());
+    status.textContent='Image scanned successfully';
+    }catch(err){
+    status.textContent='No barcode found in image';
+    }
     }
     });
     </script>
-
         <script src="index.js"></script>
         <script>
             const baseURL = 'https://knihobudka-online-production.up.railway.app';
