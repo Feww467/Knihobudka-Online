@@ -68,10 +68,9 @@ h1 {
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-#addBookForm button {
+#addBookForm button, #scanning button {
     width: 100%;
     padding: 14px;
-    background-color: #4a90e2;
     color: white;
     border: none;
     border-radius: 6px;
@@ -80,7 +79,12 @@ h1 {
     margin-top: 10px;
     cursor: pointer;
 }
-
+#addBookForm button,#scanBooksButton {
+    background-color: #4a90e2;
+}
+#scanning #stopScanningButton {
+    background-color: #dc3545;
+}
 #addBookForm button:active {
     background-color: #357abd;
     transform: scale(0.98);
