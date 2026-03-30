@@ -27,9 +27,8 @@
                 </div>
                 <button type="button" onclick="addBook()">Přidat knihu</button>
             </form>
-            <div id="scanner">
+            <div id="scanning"><button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button></div>
             <button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>
-            </div>
             <div class="searchWindow">
                 <h2>Vyhledat v knihobudce:</h2><input type="text" id="searchInput" oninput="searchBooks(this.value)" placeholder="">
             </div>
@@ -103,23 +102,9 @@
                         return}
                 
                 if (!title || !surname || !name || !yearPublished) { // If any of the fields are empty, try to fetch book data using the provided ISBN
-                    const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
-                    book = await getBook.json();
-                    console.log(book);
-                    if (!book.name) { //Handles the cases of a single named author, where the API returns the name in the surname field and leaves the name field empty
-                        book.name = "";
-                    }
-                    if (!book.surname) {
-                        book.surname = book.name;
-                        book.name = "";
-                    }
-                    surname = book.surname;
-                    name = book.name;
-                    title = book.title;
-                    yearPublished = book.yearPublished;
-                    if (!title || !surname || !name || !yearPublished) {
-                        alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
-                        return}}
+                    addBookByISBN(isbn);
+                    return;
+                }
                 try {
                     var row = table.insertRow(-1);
                     var bookSurname = row.insertCell(0);

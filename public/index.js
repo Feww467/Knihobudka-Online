@@ -39,8 +39,62 @@ function isValidISBN(isbn) {
     }
 }
 
-function scanBooks() {
+async function addBookByISBN(isbn) {
+                var table = document.getElementById("table");  
+                const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
+                book = await getBook.json();
+                console.log(book);
+                if (!book.name) { //Handles the cases of a single named author, where the API returns the name in the surname field and leaves the name field empty
+                    book.name = "";
+                }
+                if (!book.surname) {
+                    book.surname = book.name;
+                    book.name = "";
+                }
+                var surname = book.surname;
+                var name = book.name;
+                var title = book.title;
+                var yearPublished = book.yearPublished;
+                if (!title || !surname || !name || !yearPublished) {
+                    alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
+                    return}
+                try {
+                    var row = table.insertRow(-1);
+                    var bookSurname = row.insertCell(0);
+                    var bookName = row.insertCell(1);
+                    var bookTitle = row.insertCell(2);
+                    var datePublished = row.insertCell(3);
+                    var bookIsbn = row.insertCell(4);
+                    var deleteBook = row.insertCell(5);
+                    deleteBook.innerHTML = `<button class="editButton" onclick="editRow(this)">Upravit</button><button onclick="deleteBook(this)">Odstranit</button>`;
+                    bookSurname.innerHTML = surname;
+                    bookName.innerHTML = name;
+                    bookTitle.innerHTML = title;
+                    datePublished.innerHTML = yearPublished;
+                    bookIsbn.innerHTML = isbn;
+                    const response = await fetch(baseURL+"/api/books/add", {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": 'application/json'
+                        },
+                        body: JSON.stringify({
+                            surname: surname,
+                            name: name,
+                            title: title,
+                            year: yearPublished,
+                            isbn: isbn
+                        })
+                    })
+                    const newItem = await response.json();
+                    row.id = newItem.bookId
+                    document.getElementById("addBookForm").reset();
+                } catch (error) {
+                    alert('Chyba při přidávání knihy. Zkuste to prosím znovu.');
+                    console.error('Error adding book:', error);
+                }}
 
+function scanBooks() {
+            document.getElementById('scanning').innerHTML = '<div id="scanner"></div><button type="button" id="stopScanningButton" onclick="stopScanning()">Zastavit skenování</button>';
             const scanner = new Html5QrcodeScanner('scanner', { 
                 // Scanner will be initialized in DOM inside element with id of 'reader'
                 qrbox: {
@@ -52,15 +106,11 @@ function scanBooks() {
             scanner.render(success, error);
             // Starts scanner
             function success(result) {
-                document.getElementById('result').innerHTML = `
-                <h2>Success!</h2>
-                <p><a href="${result}">${result}</a></p>
-                `;
-                // Prints result as a link inside result element
+               if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
+                        alert('ISBN není validní');
+                        return}
+                addBookByISBN(result);
                 scanner.clear();
-                // Clears scanning instance
-                document.getElementById('reader').remove();
-                // Removes reader element from DOM since no longer needed
             }
             function error(err) {
                 console.error(err);
