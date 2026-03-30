@@ -27,6 +27,7 @@
                 </div>
                 <button type="button" onclick="addBook()">Přidat knihu</button>
             </form>
+            <button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>
             <div class="searchWindow">
                 <h2>Vyhledat v knihobudce:</h2><input type="text" id="searchInput" oninput="searchBooks(this.value)" placeholder="">
             </div>
@@ -44,18 +45,13 @@
                 </tr>
             </table>
         </div>
-        <main>
-            <div id="reader"></div>
-            <div id="result"></div>
-        </main>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-
-            const scanner = new Html5QrcodeScanner('reader', { 
+            const scanner = new Html5QrcodeScanner('scanBooksButton', { 
                 // Scanner will be initialized in DOM inside element with id of 'reader'
                 qrbox: {
-                    width: 250,
-                    height: 250,
+                    width: 500,
+                    height: 200,
                 },  // Sets dimensions of scanning box (set relative to reader element width)
                 fps: 20, // Frames per second to attempt a scan
             });
