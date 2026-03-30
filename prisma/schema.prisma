@@ -16,10 +16,11 @@ datasource db {
 }
 model books {
   bookId     Int       @id @default(autoincrement())
+  shelfId    Int
   surname    String
   name       String
   title      String
-  year       String
+  year       Int
   isbn       String
   deleted    Boolean   @default(false)
 }
