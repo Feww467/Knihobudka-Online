@@ -15,9 +15,9 @@ services:
   db:
     image: postgres:13
     environment:
-      - POSTGRES_DB=db
+      - POSTGRES_DB=railway
       - POSTGRES_USER=postgres  # Use standard 'postgres' user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=niPsZqQgMuPzYGRdRAEvouWdTjFIvOuO  # Use the same password as in the DATABASE_URL for consistency
     ports:
       - "5432:5432"
     healthcheck:
