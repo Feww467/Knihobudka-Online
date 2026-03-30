@@ -44,219 +44,40 @@
                 </tr>
             </table>
         </div>
-<h1>📚 Book Barcode Scanner</h1>
+        <main>
+            <div id="reader"></div>
+            <div id="result"></div>
+        </main>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
 
-<div id="videoContainer">
-<video id="video" autoplay muted playsinline></video>
-<div id="scanBox"></div>
-</div>
+            const scanner = new Html5QrcodeScanner('reader', { 
+                // Scanner will be initialized in DOM inside element with id of 'reader'
+                qrbox: {
+                    width: 250,
+                    height: 250,
+                },  // Sets dimensions of scanning box (set relative to reader element width)
+                fps: 20, // Frames per second to attempt a scan
+            });
+            scanner.render(success, error);
+            // Starts scanner
+            function success(result) {
+                document.getElementById('result').innerHTML = `
+                <h2>Success!</h2>
+                <p><a href="${result}">${result}</a></p>
+                `;
+                // Prints result as a link inside result element
+                scanner.clear();
+                // Clears scanning instance
+                document.getElementById('reader').remove();
+                // Removes reader element from DOM since no longer needed
+            }
+            function error(err) {
+                console.error(err);
+                // Prints any errors to the console
+            }
 
-<canvas id="canvas"></canvas>
-
-<div>
-<button onclick="startScanner()">Start Scanner</button>
-<button onclick="toggleTorch()">🔦 Flashlight</button>
-</div>
-
-<div>
-<input type="file" id="imageInput" accept="image/*" />
-</div>
-
-<div id="status">Waiting for scan...</div>
-
-<h2>Scanned Books</h2>
-<div id="results"></div>
-
-<script src="https://unpkg.com/@zxing/library@latest"></script>
-
-<script>
-const hints = new Map();
-hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.EAN_13]);
-const codeReader = new ZXing.BrowserMultiFormatReader(hints);
-
-const video=document.getElementById('video');
-const status=document.getElementById('status');
-const results=document.getElementById('results');
-const imageInput=document.getElementById('imageInput');
-
-let currentStream=null;
-let torch=false;
-let scanned=new Set();
-
-function isBookBarcode(code){
- return code.startsWith('978')||code.startsWith('979');
-}
-
-async function fetchBook(isbn){
- try{
-  const res=await fetch(`https://openlibrary.org/isbn/${isbn}.json`);
-  if(!res.ok) throw new Error();
-
-  const data=await res.json();
-
-  let author="";
-
-  if(data.authors&&data.authors.length>0){
-   const a=await fetch(`https://openlibrary.org${data.authors[0].key}.json`);
-   const ad=await a.json();
-   author=ad.name;
-  }
-
-  const cover=`https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
-
-  addBook({
-   title:data.title,
-   author,
-   isbn,
-   cover
-  });
-
- }catch{
-  addBook({
-   title:"Unknown Book",
-   author:"",
-   isbn,
-   cover:""
-  });
- }
-}
-
-function addBook(book){
- if(scanned.has(book.isbn)) return;
- scanned.add(book.isbn);
-
- const div=document.createElement('div');
- div.className='book';
-
- const img=document.createElement('img');
- img.src=book.cover||"";
-
- const info=document.createElement('div');
- info.className='bookInfo';
-
- const title=document.createElement('div');
- title.textContent=book.title;
-
- const author=document.createElement('div');
- author.textContent=book.author;
-
- const isbn=document.createElement('div');
- isbn.className='isbn';
- isbn.textContent=book.isbn;
-
- info.appendChild(title);
- info.appendChild(author);
- info.appendChild(isbn);
-
- div.appendChild(img);
- div.appendChild(info);
-
- results.prepend(div);
-}
-
-async function startScanner(){
- status.textContent="Starting camera...";
-
- try{
-
-  const stream=await navigator.mediaDevices.getUserMedia({
-   video:{facingMode:{ideal:'environment'},focusMode:'continuous'}
-  });
-
-  currentStream=stream;
-  video.srcObject=stream;
-
-  const track=stream.getVideoTracks()[0];
-
-  const capabilities=track.getCapabilities();
-
-  if(capabilities.focusMode){
-   try{
-    await track.applyConstraints({advanced:[{focusMode:'continuous'}]});
-   }catch{}
-  }
-
-  codeReader.decodeFromVideoElement(video,(result,err)=>{
-
-   if(result){
-
-    const code=result.text;
-
-    if(isBookBarcode(code)){
-     status.textContent="ISBN detected";
-     fetchBook(code);
-    }else{
-     status.textContent="Not a book barcode";
-    }
-
-   }
-
-  });
-
- }catch(err){
-  status.textContent="Camera error: "+err;
- }
-}
-
-async function toggleTorch(){
- if(!currentStream) return;
-
- const track=currentStream.getVideoTracks()[0];
- const cap=track.getCapabilities();
-
- if(!cap.torch){
-  status.textContent="Torch not supported";
-  return;
- }
-
- torch=!torch;
-
- try{
-  await track.applyConstraints({advanced:[{torch}]});
- }catch(e){
-  status.textContent="Torch error";
- }
-}
-
-imageInput.addEventListener('change',async e=>{
-
- const file=e.target.files[0];
- if(!file) return;
-
- const img=new Image();
- img.src=URL.createObjectURL(file);
-
- img.onload=async()=>{
-
-  const canvas=document.getElementById('canvas');
-  const ctx=canvas.getContext('2d');
-
-  canvas.width=img.width;
-  canvas.height=img.height;
-
-  ctx.drawImage(img,0,0);
-
-  try{
-
-   const result=await codeReader.decodeFromCanvas(canvas);
-
-   const code=result.text;
-
-   if(isBookBarcode(code)){
-    fetchBook(code);
-    status.textContent="Book detected from image";
-   }else{
-    status.textContent="Not a book barcode";
-   }
-
-  }catch{
-   status.textContent="No barcode found";
-  }
- }
-});
-
-</script>
-
+        </script>
         <script src="index.js"></script>
         <script>
             const baseURL = 'https://knihobudka-online-production.up.railway.app';
