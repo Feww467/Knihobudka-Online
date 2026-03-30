@@ -44,6 +44,59 @@
                 </tr>
             </table>
         </div>
+        <h1>📷 Barcode Scanner</h1>
+
+            <video id="video" autoplay muted playsinline></video>
+            <canvas id="canvas" style="display:none"></canvas>
+
+            <div>
+            <button onclick="startScanner()">Start Camera Scanner</button>
+            </div>
+
+            <div>
+            <input type="file" id="imageInput" accept="image/*" />
+            </div>
+
+            <div id="status">Waiting for scan...</div>
+
+            <h2>Scanned Results</h2>
+            <div id="results"></div>
+
+            <script src="https://unpkg.com/@zxing/library@latest"></script>
+
+        <script>
+            const codeReader = new ZXing.BrowserMultiFormatReader();
+            const video = document.getElementById('video');
+            const status = document.getElementById('status');
+            const resultsContainer = document.getElementById('results');
+            const imageInput = document.getElementById('imageInput');
+
+            function addResult(text, format){
+            const div = document.createElement('div');
+            div.className = 'resultItem';
+            div.textContent = `${format}: ${text}`;
+            resultsContainer.prepend(div);
+            }
+
+            async function startScanner(){
+            status.textContent = 'Starting camera...';
+
+            try{
+                const devices = await codeReader.listVideoInputDevices();
+                const selectedDeviceId = devices[0].deviceId;
+
+                codeReader.decodeFromVideoDevice(selectedDeviceId, video, (result, err) => {
+                if(result){
+                    status.textContent = 'Barcode detected';
+                    addResult(result.text, result.getBarcodeFormat());
+                }
+                });
+            }
+            catch(err){
+                status.textContent = 'Camera error: ' + err;
+            }
+            }
+        </script>
         <script src="index.js"></script>
         <script>
             const baseURL = 'https://knihobudka-online-production.up.railway.app';
