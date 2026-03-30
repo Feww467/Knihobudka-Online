@@ -5,7 +5,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://postgres:BUHwmUKSgyeYblOmPdoeXxNbJfTobCQz@postgres.railway.internal:5432/railway
+      - DATABASE_URL=postgresql://postgres:BUHwmUKSgyeYblOmPdoeXxNbJfTobCQz@postgres.railway.internal/railway
     depends_on:
       db:
         condition: service_healthy
