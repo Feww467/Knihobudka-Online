@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE "books" (
     "bookId" SERIAL NOT NULL,
+    "shelfId" INTEGER NOT NULL,
     "surname" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "title" TEXT NOT NULL,
