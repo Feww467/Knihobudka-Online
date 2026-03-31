@@ -89,9 +89,6 @@ h1 {
     background-color: #357abd;
     transform: scale(0.98);
 }
-button {
-    display: none;
-}
 /* Table container */
 div:last-child {
     overflow-x: auto;
