@@ -156,6 +156,7 @@ app.put('/api/books/update', async (req, res) => {
 app.delete('/', async (req, res) => {
     try {
         const { id } = req.body;
+        console.log(id, typeof id)
         const updatedItem = await prisma.books.update({
         where: { bookid: Number(id) },
         data: { deleted: true },
