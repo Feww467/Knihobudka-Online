@@ -46,7 +46,6 @@ async function addBookByISBN(isbn) {
                 var table = document.getElementById("table");  
                 const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
                 book = await getBook.json();
-                console.log(book);
                 if (!book.name) { //Handles the cases of a single named author, where the API returns the name in the surname field and leaves the name field empty
                     book.name = "";
                 }
@@ -90,7 +89,6 @@ async function addBookByISBN(isbn) {
                     })
                     const newItem = await response.json();
                     row.id = newItem.bookid
-                    console.log(newItem.bookid)
                     document.getElementById("addBookForm").reset();
                 } catch (error) {
                     alert('Chyba při přidávání knihy. Zkuste to prosím znovu.');

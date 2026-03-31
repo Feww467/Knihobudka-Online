@@ -80,7 +80,6 @@ app.get('/api/books/isbn', async (req, res) => {
                 const book = data.items[0];
                 const info = book.volumeInfo;
                 const author = info.authors ? info.authors.join(', ') : 'Unknown';
-                console.log(info.authors);
                 book.surname = author.split(' ').slice(-1).join(' ');
                 book.name = author.split(' ').slice(0, -1).join(' '); 
                 book.title = info.title;
@@ -97,9 +96,7 @@ app.get('/api/books/isbn', async (req, res) => {
                     .then(response => response.json())
                     .then(data => {
                         const book = data[`ISBN:${isbn}`];
-                        console.log(book.authors);
                         const author = book.authors?.map(author => author.name).join(', ') || 'Unknown';
-                        console.log(author);
                         if ((author.split(', ')[0]).split(' ').length > 1) {
                             book.surname = ((author.split(', ')[0]).split(' ').slice(-1)).join(' ');
                             book.name = ((author.split(', '))[1])}
@@ -107,7 +104,6 @@ app.get('/api/books/isbn', async (req, res) => {
                             book.surname = author.split(', ')[0];
                             book.name = " ";}
                         book.yearPublished = (book.publish_date.split(' ')).pop();
-                        console.log(book.publish_date);
                         res.status(200).json(book);
                         console.log("Fetched from OpenLibrary")})
                     .catch(error => {
@@ -137,8 +133,7 @@ app.post('/api/books/add', async (req, res) => {
                 isbn: isbn,
             }
         });
-        console.log(book)
-         res.status(201).json(book);
+        res.status(201).json(book);
     } catch (error) {
         console.error('Error creating book:', error);
         res.status(500).json({ error: 'Failed to create book' });
@@ -157,7 +152,6 @@ app.put('/api/books/update', async (req, res) => {
 app.delete('/', async (req, res) => {
     try {
         const { id } = req.body;
-        console.log(id, typeof id)
         const updatedItem = await prisma.books.update({
         where: { bookid: Number(id) },
         data: { deleted: true },
