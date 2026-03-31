@@ -137,6 +137,7 @@ app.post('/api/books/add', async (req, res) => {
                 isbn: isbn,
             }
         });
+        console.log(book)
          res.status(201).json(book);
     } catch (error) {
         console.error('Error creating book:', error);
