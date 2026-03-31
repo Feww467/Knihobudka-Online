@@ -94,32 +94,52 @@ async function addBookByISBN(isbn) {
                 }}
 
 function scanBooks() {
-            document.getElementById('scanning').innerHTML = '<div id="scanner"></div>';
-            const scanner = new Html5QrcodeScanner('scanner', { 
-                // Scanner will be initialized in DOM inside element with id of 'reader'
-                qrbox: {
-                    width: 500,
-                    height: 200,
-                },  // Sets dimensions of scanning box (set relative to reader element width)
-                fps: 20, // Frames per second to attempt a scan
-            });
-            scanner.render(success, error);
-            function stopScanning() {
-                document.getElementById('scanning').innerHTML = '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
-                return;
-            }
-            button = document.getElementById('html5-qrcode-button-camera-stop')
-            button.onclick = function() {stopScanning()}
-            // Starts scanner
-            function success(result) {
-                isbn = String(result)
-               if (isValidISBN(isbn) == false) { //Calls a function, which returns, whether the ISBN provided is valid
-                        alert('ISBN není validní');
-                        return}
-                addBookByISBN(isbn);
-            }
-            function error(err) {
-                console.error(err);
-                // Prints any errors to the console
-            }
+    document.getElementById('scanning').innerHTML = '<div id="scanner"></div>';
+    const scanner = new Html5QrcodeScanner('scanner', { 
+        qrbox: {
+            width: 500,
+            height: 200,
+        },
+        fps: 20,
+    });
+    
+    let isScanning = true; // Flag to control scanning
+    
+    function stopScanning() {
+        if (isScanning) {
+            isScanning = false;
+            scanner.clear(); // Properly clear the scanner
+            document.getElementById('scanning').innerHTML = '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
         }
+    }
+    
+    function success(result) {
+        if (!isScanning) return; // Don't process if scanning is stopped
+        
+        isbn = String(result);
+        if (isValidISBN(isbn) == false) {
+            alert('ISBN není validní');
+            return; // Keep scanner running, just show alert
+        }
+        
+        addBookByISBN(isbn);
+        // Don't restart the scanner, it continues scanning automatically
+    }
+    
+    function error(err) {
+        if (isScanning) {
+            console.error(err);
+        }
+    }
+    
+    scanner.render(success, error);
+    
+    // Wait for the stop button to be created and attach event listener
+    const checkForStopButton = setInterval(() => {
+        const button = document.getElementById('html5-qrcode-button-camera-stop');
+        if (button) {
+            clearInterval(checkForStopButton);
+            button.onclick = function() { stopScanning(); };
+        }
+    }, 100);
+}
