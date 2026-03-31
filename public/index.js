@@ -108,7 +108,7 @@ function scanBooks() {
                 return;
             }
             button = document.getElementById('html5-qrcode-button-camera-stop')
-            button.onclick = "stopScanning()"
+            button.onclick = function() {stopScanning()}
             // Starts scanner
             function success(result) {
                if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
