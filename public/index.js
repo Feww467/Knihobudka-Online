@@ -89,7 +89,7 @@ async function addBookByISBN(isbn) {
                         })
                     })
                     const newItem = await response.json();
-                    row.id = newItem.bookId
+                    row.id = newItem.bookid
                     document.getElementById("addBookForm").reset();
                 } catch (error) {
                     alert('Chyba při přidávání knihy. Zkuste to prosím znovu.');

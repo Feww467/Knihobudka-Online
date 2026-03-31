@@ -163,8 +163,8 @@ app.delete('/', async (req, res) => {
 
       res.status(200).json(updatedItem);
     } catch (error) {
-        console.error('Error creating book:', error);
-        res.status(500).json({ error: 'Failed to create book' });
+        console.error('Error deleting book:', error);
+        res.status(500).json({ error: 'Failed to delete a book' });
     }
 });
 
