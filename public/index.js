@@ -103,12 +103,12 @@ function scanBooks() {
                 fps: 20, // Frames per second to attempt a scan
             });
             scanner.render(success, error);
-            async function stopScanning(scanner) {
+            function stopScanning(scanner) {
                 scanner.clear()
+                document.getElementById('scanning').innerHTML = '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
             }
             button = document.getElementById('html5-qrcode-button-camera-stop')
             button.onclick = stopScanning()
-            document.getElementById('scanning').innerHTML = '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
             // Starts scanner
             function success(result) {
                if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
