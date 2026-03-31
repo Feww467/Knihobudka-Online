@@ -111,10 +111,11 @@ function scanBooks() {
             button.onclick = function() {stopScanning()}
             // Starts scanner
             function success(result) {
-               if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
+            isbn = String(result)
+               if (isValidISBN(isbn) == false) { //Calls a function, which returns, whether the ISBN provided is valid
                         alert('ISBN není validní');
                         return}
-                addBookByISBN(result);
+                addBookByISBN(isbn);
             }
             function error(err) {
                 console.error(err);
