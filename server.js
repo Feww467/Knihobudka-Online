@@ -62,6 +62,7 @@ app.get('/api/books/isbn', async (req, res) => {
         'Accept': 'application/json',
         }
     });
+        console.log(response)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
