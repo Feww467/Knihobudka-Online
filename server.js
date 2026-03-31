@@ -69,7 +69,7 @@ app.get('/api/books/isbn', async (req, res) => {
         }
         const data = await response.json();
         console.log(data)
-        if (data.records && data.records.length > 0) {
+        if ((data.records && data.records.length > 0) && (isbn == data.records[0].isbn)) {
             const book = data.records[0];
             book.surname = (authorsSplit(book.authors)).surname;
             book.name = (authorsSplit(book.authors)).name;
@@ -83,7 +83,7 @@ app.get('/api/books/isbn', async (req, res) => {
         try {
             const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
             const data = await response.json();
-            if (data.totalItems > 0) {
+            if ((data.totalItems > 0) && (isbn == data.items[0].volumeInfo.isbn)){
                 const book = data.items[0];
                 const info = book.volumeInfo;
                 const author = info.authors ? info.authors.join(', ') : 'Unknown';
