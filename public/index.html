@@ -132,6 +132,7 @@
                         })
                     })
                     const newItem = await response.json();
+                    console.log(newItem)
                     row.id = newItem.bookid
                     console.log(newItem.bookid)
                     document.getElementById("addBookForm").reset();
@@ -142,6 +143,7 @@
             async function deleteBook(button) {
                 var row = button.parentNode.parentNode;
                 const id = Number(row.getAttribute('id'));
+                console.log(id)
                 row.parentNode.removeChild(row);
                 const res = await fetch(baseURL, {
                     method: 'DELETE',
