@@ -141,7 +141,7 @@
             }};
             async function deleteBook(button) {
                 var row = button.parentNode.parentNode;
-                const id = Number(getAttribute('id'));
+                const id = Number(row.getAttribute('id'));
                 row.parentNode.removeChild(row);
                 const res = await fetch(baseURL, {
                     method: 'DELETE',
