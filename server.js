@@ -58,6 +58,7 @@ app.get('/api/books/isbn', async (req, res) => {
     const isbn = req.query.isbn;
     try {
         const response = await fetch(`https://www.knihovny.cz/api/v1/search?lookfor=isbn:${isbn}&field[]=authors&field[]=title&field[]=humanReadablePublicationDates&field[]=bibliographicLevel&field[]=physicalDescriptions&sort=relevance&limit=2`,{
+        method: 'POST',
         headers: {
         'Accept': 'application/json',
         }
