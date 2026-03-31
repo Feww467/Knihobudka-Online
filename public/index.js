@@ -43,7 +43,6 @@ async function addBookByISBN(isbn) {
                 var table = document.getElementById("table");  
                 const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
                 book = await getBook.json();
-                console.log(book);
                 if (!book.name) { //Handles the cases of a single named author, where the API returns the name in the surname field and leaves the name field empty
                     book.name = "";
                 }
@@ -54,7 +53,7 @@ async function addBookByISBN(isbn) {
                 var surname = book.surname;
                 var name = book.name;
                 var title = book.title;
-                var yearPublished = book.yearPublished;
+                var yearPublished = Number(book.yearPublished);
                 if (!title || !surname || !name || !yearPublished) {
                     alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
                     return}
@@ -86,7 +85,7 @@ async function addBookByISBN(isbn) {
                         })
                     })
                     const newItem = await response.json();
-                    row.id = newItem.bookId
+                    row.id = newItem.bookid
                     document.getElementById("addBookForm").reset();
                 } catch (error) {
                     alert('Chyba při přidávání knihy. Zkuste to prosím znovu.');
@@ -94,7 +93,7 @@ async function addBookByISBN(isbn) {
                 }}
 
 function scanBooks() {
-            document.getElementById('scanning').innerHTML = '<div id="scanner"></div><button type="button" id="stopScanningButton" onclick="stopScanning()">Zastavit skenování</button>';
+            document.getElementById('scanning').innerHTML = '<div id="scanner"></div>';
             const scanner = new Html5QrcodeScanner('scanner', { 
                 // Scanner will be initialized in DOM inside element with id of 'reader'
                 qrbox: {
@@ -104,13 +103,19 @@ function scanBooks() {
                 fps: 20, // Frames per second to attempt a scan
             });
             scanner.render(success, error);
+            function stopScanning() {
+                document.getElementById('scanning').innerHTML = '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
+                return;
+            }
+            button = document.getElementById('html5-qrcode-button-camera-stop')
+            button.onclick = function() {stopScanning()}
             // Starts scanner
             function success(result) {
-               if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
+            isbn = String(result)
+               if (isValidISBN(isbn) == false) { //Calls a function, which returns, whether the ISBN provided is valid
                         alert('ISBN není validní');
                         return}
-                addBookByISBN(result);
-                scanner.clear();
+                addBookByISBN(isbn);
             }
             function error(err) {
                 console.error(err);

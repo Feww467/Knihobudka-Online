@@ -15,8 +15,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model books {
-  bookId     Int       @id @default(autoincrement())
-  shelfId    Int
+  bookid     Int       @id @default(autoincrement())
+  shelfid    Int
   surname    String
   name       String
   title      String

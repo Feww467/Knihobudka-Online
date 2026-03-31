@@ -57,11 +57,18 @@ app.get('/', (_req, res) => {
 app.get('/api/books/isbn', async (req, res) => {
     const isbn = req.query.isbn;
     try {
-        const response = await fetch(`https://www.knihovny.cz/api/v1/search?lookfor=isbn:${isbn}&field[]=authors&field[]=title&field[]=humanReadablePublicationDates&field[]=bibliographicLevel&field[]=physicalDescriptions&sort=relevance&limit=2`);
+        const response = await fetch(`https://www.knihovny.cz/api/v1/search?lookfor=isbn:${isbn}&field[]=authors&field[]=title&field[]=humanReadablePublicationDates&field[]=bibliographicLevel&field[]=physicalDescriptions&sort=relevance&limit=2`,{
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        }
+    });
+        console.log(response)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log(data)
         if (data.records && data.records.length > 0) {
             const book = data.records[0];
             book.surname = (authorsSplit(book.authors)).surname;
@@ -80,7 +87,6 @@ app.get('/api/books/isbn', async (req, res) => {
                 const book = data.items[0];
                 const info = book.volumeInfo;
                 const author = info.authors ? info.authors.join(', ') : 'Unknown';
-                console.log(info.authors);
                 book.surname = author.split(' ').slice(-1).join(' ');
                 book.name = author.split(' ').slice(0, -1).join(' '); 
                 book.title = info.title;
@@ -97,9 +103,7 @@ app.get('/api/books/isbn', async (req, res) => {
                     .then(response => response.json())
                     .then(data => {
                         const book = data[`ISBN:${isbn}`];
-                        console.log(book.authors);
                         const author = book.authors?.map(author => author.name).join(', ') || 'Unknown';
-                        console.log(author);
                         if ((author.split(', ')[0]).split(' ').length > 1) {
                             book.surname = ((author.split(', ')[0]).split(' ').slice(-1)).join(' ');
                             book.name = ((author.split(', '))[1])}
@@ -107,7 +111,6 @@ app.get('/api/books/isbn', async (req, res) => {
                             book.surname = author.split(', ')[0];
                             book.name = " ";}
                         book.yearPublished = (book.publish_date.split(' ')).pop();
-                        console.log(book.publish_date);
                         res.status(200).json(book);
                         console.log("Fetched from OpenLibrary")})
                     .catch(error => {
@@ -129,6 +132,7 @@ app.post('/api/books/add', async (req, res) => {
         
         const book = await prisma.books.create({
             data: {
+                shelfid: 1,
                 surname: surname,
                 name: name,
                 title: title,
@@ -136,7 +140,7 @@ app.post('/api/books/add', async (req, res) => {
                 isbn: isbn,
             }
         });
-         res.status(201).json(book);
+        res.status(201).json(book);
     } catch (error) {
         console.error('Error creating book:', error);
         res.status(500).json({ error: 'Failed to create book' });
@@ -147,7 +151,7 @@ app.put('/api/books/update', async (req, res) => {
     const { id, surname, name, title, year, isbn } = req.body;
     // Your update logic here
     const updatedItem = await prisma.books.update({
-        where: { bookId: Number(id) },
+        where: { bookid: Number(id) },
         data: {surname: surname, name: name, title: title, year: year, isbn: isbn },
     })
     res.status(200).json({ message: 'Book updated', book: updatedItem})
@@ -156,14 +160,14 @@ app.delete('/', async (req, res) => {
     try {
         const { id } = req.body;
         const updatedItem = await prisma.books.update({
-        where: { bookId: Number(id) },
+        where: { bookid: Number(id) },
         data: { deleted: true },
       });
 
       res.status(200).json(updatedItem);
     } catch (error) {
-        console.error('Error creating book:', error);
-        res.status(500).json({ error: 'Failed to create book' });
+        console.error('Error deleting book:', error);
+        res.status(500).json({ error: 'Failed to delete a book' });
     }
 });
 
