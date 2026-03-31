@@ -38,7 +38,10 @@ function isValidISBN(isbn) {
         return false;
     }
 }
-
+async function stopScanning(scanner) {
+    scanner.clear()
+    document.getElementById('scanning').innerHTML = '<button type="button" id="scanningButton" onclick="scanBooks()">Skenovat knihy</button>';
+}
 async function addBookByISBN(isbn) {
                 var table = document.getElementById("table");  
                 const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
@@ -94,7 +97,7 @@ async function addBookByISBN(isbn) {
                 }}
 
 function scanBooks() {
-            document.getElementById('scanning').innerHTML = '<div id="scanner"></div><button type="button" id="stopScanningButton" onclick="stopScanning()">Zastavit skenování</button>';
+            document.getElementById('scanning').innerHTML = '<div id="scanner"></div><button type="button" id="stopScanningButton" onclick="stopScanning(scanner)">Zastavit skenování</button>';
             const scanner = new Html5QrcodeScanner('scanner', { 
                 // Scanner will be initialized in DOM inside element with id of 'reader'
                 qrbox: {
@@ -110,7 +113,7 @@ function scanBooks() {
                         alert('ISBN není validní');
                         return}
                 addBookByISBN(result);
-                scanner.clear();
+                ;
             }
             function error(err) {
                 console.error(err);
