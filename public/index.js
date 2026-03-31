@@ -115,8 +115,6 @@ function scanBooks() {
                         alert('ISBN není validní');
                         return}
                 addBookByISBN(result);
-                scanBooks();
-                return;
             }
             function error(err) {
                 console.error(err);
