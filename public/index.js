@@ -85,6 +85,7 @@ async function addBookByISBN(isbn) {
                         })
                     })
                     const newItem = await response.json();
+                    console.log(newItem);
                     row.id = newItem.bookid
                     document.getElementById("addBookForm").reset();
                 } catch (error) {
