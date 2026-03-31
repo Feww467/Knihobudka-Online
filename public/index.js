@@ -118,7 +118,7 @@ function scanBooks() {
                         return}
                 addBookByISBN(isbn);
                 scanner.clear();
-                stopScanning();
+                scanBooks();
             }
             function error(err) {
                 console.error(err);
