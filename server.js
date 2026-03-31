@@ -66,6 +66,7 @@ app.get('/api/books/isbn', async (req, res) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log(data)
         if (data.records && data.records.length > 0) {
             const book = data.records[0];
             book.surname = (authorsSplit(book.authors)).surname;
