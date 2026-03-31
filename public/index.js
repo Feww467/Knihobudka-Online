@@ -112,8 +112,7 @@ function scanBooks() {
                if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
                         alert('ISBN není validní');
                         return}
-                isbn = Number(result)
-                addBookByISBN(isbn);
+                addBookByISBN(result);
                 ;
             }
             function error(err) {

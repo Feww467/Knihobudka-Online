@@ -21,6 +21,6 @@ model books {
   name       String
   title      String
   year       Int
-  isbn       Int
+  isbn       String
   deleted    Boolean   @default(false)
 }
