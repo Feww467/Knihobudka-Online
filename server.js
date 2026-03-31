@@ -129,6 +129,7 @@ app.post('/api/books/add', async (req, res) => {
         
         const book = await prisma.books.create({
             data: {
+                shelfid: 1,
                 surname: surname,
                 name: name,
                 title: title,
