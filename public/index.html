@@ -133,6 +133,7 @@
                     })
                     const newItem = await response.json();
                     row.id = newItem.bookid
+                    console.log(newItem.bookid)
                     document.getElementById("addBookForm").reset();
                 } catch (error) {
                     alert('Chyba při přidávání knihy. Zkuste to prosím znovu.');
@@ -140,7 +141,7 @@
             }};
             async function deleteBook(button) {
                 var row = button.parentNode.parentNode;
-                const id = row.getAttribute('id');
+                const id = Number(getAttribute('id'));
                 row.parentNode.removeChild(row);
                 const res = await fetch(baseURL, {
                     method: 'DELETE',
