@@ -1,3 +1,5 @@
+let lastScannedISBN = null; // Track the last scanned ISBN
+
 function isValidISBN(isbn) {
     // Check for ISBN-13 format: 13 digits, optional hyphens
     if (/^\d{1,5}-\d+-\d+-\d+-\d{1,6}$/.test(isbn) || /^\d{13}$/.test(isbn)) {
@@ -104,7 +106,6 @@ function scanBooks() {
     });
     
     let isScanning = true;
-    let lastScannedISBN = null; // Track the last scanned ISBN
     
     function stopScanning() {
         if (isScanning) {
