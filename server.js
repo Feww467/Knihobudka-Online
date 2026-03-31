@@ -148,7 +148,7 @@ app.put('/api/books/update', async (req, res) => {
     const { id, surname, name, title, year, isbn } = req.body;
     // Your update logic here
     const updatedItem = await prisma.books.update({
-        where: { bookId: Number(id) },
+        where: { bookid: Number(id) },
         data: {surname: surname, name: name, title: title, year: year, isbn: isbn },
     })
     res.status(200).json({ message: 'Book updated', book: updatedItem})
@@ -157,7 +157,7 @@ app.delete('/', async (req, res) => {
     try {
         const { id } = req.body;
         const updatedItem = await prisma.books.update({
-        where: { bookId: Number(id) },
+        where: { bookid: Number(id) },
         data: { deleted: true },
       });
 
