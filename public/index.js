@@ -103,7 +103,8 @@ function scanBooks() {
         fps: 20,
     });
     
-    let isScanning = true; // Flag to control scanning
+    let isScanning = true;
+    let lastScannedISBN = null; // Track the last scanned ISBN
     
     function stopScanning() {
         if (isScanning) {
@@ -114,16 +115,22 @@ function scanBooks() {
     }
     
     function success(result) {
-        if (!isScanning) return; // Don't process if scanning is stopped
-        
-        isbn = String(result);
-        if (isValidISBN(isbn) == false) {
-            alert('ISBN není validní');
-            return; // Keep scanner running, just show alert
+        if (!isScanning) return;
+        const isbn = String(result);
+        // Check if this ISBN was just scanned
+        if (lastScannedISBN === isbn) {
+            // Same barcode, ignore it
+            console.log('Duplicate barcode ignored:', isbn);
+            return;
         }
-        
+        // Check if ISBN is valid
+        if (isValidISBN(isbn) == false) {
+            return;
+        }
+        // Update last scanned ISBN
+        lastScannedISBN = isbn;
+        // Add the book
         addBookByISBN(isbn);
-        // Don't restart the scanner, it continues scanning automatically
     }
     
     function error(err) {
