@@ -9,11 +9,8 @@ COPY prisma ./prisma/
 # Install dependencies
 RUN npm install
 
-# Generate Prisma client
-RUN npx prisma generate
-
 # Copy rest of application
 COPY . .
 
 # Make sure your start command handles migrations
-CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && npm start"]
