@@ -57,7 +57,7 @@ async function addBookByISBN(isbn) {
                 var surname = book.surname;
                 var name = book.name;
                 var title = book.title;
-                var yearPublished = book.yearPublished;
+                var yearPublished = Number(book.yearPublished);
                 if (!title || !surname || !name || !yearPublished) {
                     alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
                     return}
@@ -112,6 +112,7 @@ function scanBooks() {
                if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
                         alert('ISBN není validní');
                         return}
+                Number(result)
                 addBookByISBN(result);
                 ;
             }

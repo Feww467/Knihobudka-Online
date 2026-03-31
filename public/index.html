@@ -101,7 +101,7 @@
                         return}
                 
                 if (!title || !surname || !name || !yearPublished) { // If any of the fields are empty, try to fetch book data using the provided ISBN
-                    addBookByISBN(isbn);
+                    addBookByISBN(Number(isbn));
                     return;
                 }
                 try {
