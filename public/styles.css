@@ -346,6 +346,10 @@ button:focus, input:focus {
     outline-offset: 2px;
 }
 
+#html5-qrcode-button-camera-stop {
+    display: none
+}
+
 /* Touch-friendly hover alternatives */
 @media (hover: hover) {
     button:hover {

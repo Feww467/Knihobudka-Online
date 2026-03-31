@@ -38,10 +38,7 @@ function isValidISBN(isbn) {
         return false;
     }
 }
-async function stopScanning(scanner) {
-    scanner.clear()
-    document.getElementById('scanning').innerHTML = '<button type="button" id="scanningButton" onclick="scanBooks()">Skenovat knihy</button>';
-}
+
 async function addBookByISBN(isbn) {
                 var table = document.getElementById("table");  
                 const getBook = await fetch(baseURL+`/api/books/isbn?isbn=${isbn}`)
@@ -96,7 +93,7 @@ async function addBookByISBN(isbn) {
                 }}
 
 function scanBooks() {
-            document.getElementById('scanning').innerHTML = '<div id="scanner"></div><button type="button" id="stopScanningButton" onclick="stopScanning(scanner)">Zastavit skenování</button>';
+            document.getElementById('scanning').innerHTML = '<div id="scanner"></div>';
             const scanner = new Html5QrcodeScanner('scanner', { 
                 // Scanner will be initialized in DOM inside element with id of 'reader'
                 qrbox: {
@@ -106,6 +103,11 @@ function scanBooks() {
                 fps: 20, // Frames per second to attempt a scan
             });
             scanner.render(success, error);
+            async function stopScanning(scanner) {
+                scanner.clear()
+            }
+            button = document.getElementById('html5-qrcode-button-camera-stop')
+            button.onclick = stopScanning()
             // Starts scanner
             function success(result) {
                if (isValidISBN(result) == false) { //Calls a function, which returns, whether the ISBN provided is valid
