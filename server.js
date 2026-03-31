@@ -59,6 +59,7 @@ app.get('/api/books/isbn', async (req, res) => {
     try {
         const response = await fetch(`https://www.knihovny.cz/api/v1/search?lookfor=isbn:${isbn}&field[]=authors&field[]=title&field[]=humanReadablePublicationDates&field[]=bibliographicLevel&field[]=physicalDescriptions&sort=relevance&limit=2`,{
         headers: {
+        'User-Agent': 'Knihobudka-Online/1.0',
         'Accept': 'application/json',
         }
     });
