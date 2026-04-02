@@ -141,10 +141,10 @@ function scanBooks() {
     }
     
     scanner.render(success, error);
-    document.getElementById("html5-qrcode-button-camera-permission").innerText = "Povolit využití fotoaparátu";
-    document.getElementById("html5-qrcode-button-camera-stop").innerText = "Přestat skenovat";
+    
     // Wait for the stop button to be created and attach event listener
     const checkForStopButton = setInterval(() => {
+        document.getElementById("html5-qrcode-button-camera-stop").innerText = "Přestat skenovat";
         const button = document.getElementById('html5-qrcode-button-camera-stop');
         if (button) {
             clearInterval(checkForStopButton);
