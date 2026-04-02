@@ -136,20 +136,20 @@ th:nth-child(2), td:nth-child(2) { /* Jmeno */
 }
 
 th:nth-child(3), td:nth-child(3) { /* Název knihy */
-    width: 30%;
+    width: 33%;
 }
 
 th:nth-child(4), td:nth-child(4) { /* Rok vydani */
-    width: 10%;
+    width: 8%;
 }
 
 th:nth-child(5), td:nth-child(5) { /* ISBN */
-    width: 15%;
+    width: 12%;
 }
 
 th:nth-child(6), td:nth-child(6) { /* Akce */
-    width: 15%;
-    min-width: 120px;
+    width: 17%;
+    min-width: 100px;
 }
 
 /* Center the "Akce" header */
