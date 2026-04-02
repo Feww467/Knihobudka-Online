@@ -121,7 +121,6 @@ function scanBooks() {
         // Check if this ISBN was just scanned
         if (lastScannedISBN === isbn) {
             // Same barcode, ignore it
-            console.log('Duplicate barcode ignored:', isbn);
             return;
         }
         // Check if ISBN is valid
@@ -136,12 +135,12 @@ function scanBooks() {
     
     function error(err) {
         if (isScanning) {
-            console.error(err);
+            {};
         }
     }
     
     scanner.render(success, error);
-    
+
     // Wait for the stop button to be created and attach event listener
     const checkForStopButton = setInterval(() => {
         document.getElementById("html5-qrcode-button-camera-stop").innerText = "Přestat skenovat";
