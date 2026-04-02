@@ -86,8 +86,14 @@ h1 {
     background-color: #357abd;
     transform: scale(0.98);
 }
-#scanBooksButton {
-    background-color: #774ae2;
+#scanning #scanBooksButton {
+    background-color: #4c00ff;
+}
+#scanning #html5-qrcode-button-camera-permission {
+    background-color: goldenrod;
+}
+#scanning #html5-qrcode-button-camera-stop {
+    background-color: red;
 }
 
 /* Table styling */

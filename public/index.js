@@ -104,7 +104,7 @@ function scanBooks() {
         },
         fps: 20,
     });
-    
+    document.getElementById("html5-qrcode-button-camera-stop").innerText = "Ukončit skenování";
     let isScanning = true;
     
     function stopScanning() {
