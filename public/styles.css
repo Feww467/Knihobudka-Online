@@ -80,14 +80,14 @@ h1 {
     cursor: pointer;
 }
 #addBookForm button {
-    background-color: #4a90e2;
+    background-color:#0672dd;
 }
 #addBookForm button:active {
-    background-color: #357abd;
+    background-color: #3a7ecd;
     transform: scale(0.98);
 }
 #scanning #scanBooksButton {
-    background-color: #4c00ff;
+    background-color: #2fc402;
 }
 #scanning #html5-qrcode-button-camera-permission {
     background-color: goldenrod;
