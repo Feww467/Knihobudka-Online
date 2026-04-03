@@ -148,7 +148,9 @@ app.post('/api/books/add', async (req, res) => {
 });
 app.put('/api/books/update', async (req, res) => {
     // Update book in database
+    console.log(req.body)
     const { id, surname, name, title, year, isbn } = req.body;
+    console.log(id)
     // Your update logic here
     const updatedItem = await prisma.books.update({
         where: { bookid: Number(id) },
