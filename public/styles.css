@@ -68,7 +68,7 @@ h1 {
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-#addBookForm button, #scanning button {
+#addBookForm button, #scanning button, #scanDeleteButton {
     width: 100%;
     padding: 14px;
     color: white;
@@ -92,7 +92,7 @@ h1 {
 #scanning #html5-qrcode-button-camera-permission {
     background-color: goldenrod;
 }
-#scanning #html5-qrcode-button-camera-stop {
+#scanning #html5-qrcode-button-camera-stop, #scanDeleteButton {
     background-color: red;
 }
 
