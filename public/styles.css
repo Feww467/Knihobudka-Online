@@ -68,7 +68,7 @@ h1 {
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-#addBookForm button, #scanning button, #scanDeleteButton {
+#addBookForm button, #scanning button, #scanDeleteButton, #reportButton {
     width: 100%;
     padding: 14px;
     color: white;
