@@ -139,6 +139,7 @@ th:nth-child(5), td:nth-child(5) { /* ISBN */
     width: 15%;
 }
 
+<<<<<<< Updated upstream:Knihobudka/styles.css
 th:nth-child(6), td:nth-child(6) { /* Akce */
     width: 15%;
     min-width: 120px;
@@ -224,6 +225,8 @@ td input {
 }
 
 /* Mobile responsiveness */
+=======
+>>>>>>> Stashed changes:public/styles.css
 @media (orientation: portrait) or (max-width: 768px) {
     body {
         padding: 5px;
