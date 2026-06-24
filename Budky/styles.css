@@ -1,1 +1,30 @@
-#map { height: 180px; }
+#map { 
+    width: 90%;
+    padding-bottom: 50%; /* half of width = aspect ratio 2:1 */
+    position: relative;
+    margin-right: 5%;
+    margin-left: 5%;
+ }
+ #bookcaseTable {
+    display: none
+ }
+#mapButton {
+    background-color: blue;
+    color: white;
+    margin-right: 0;
+}
+#listButton {
+    background-color: white;
+    color: black;
+    margin-left: 0;
+}
+.overviewButton {
+    width: 45%;
+    margin: 5%;
+    margin-bottom: 0;
+    font-size: 20px;
+    margin-top: 10px
+}
+.title {
+    text-align: center;
+}
