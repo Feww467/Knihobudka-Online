@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { cons } from 'effect/List';
 import { all } from 'proxy-addr';
 import cors from 'cors';
+import { id } from 'effect/Fiber';
 
 const app = express();
 const port = 3000;
@@ -50,12 +51,19 @@ function extractFirstLastName(authorString) {
 app.use(express.json());
 app.use(express.static('public'));
 
-app.get('/', (_req, res) => {
+app.get('/', (req, res) => {
     res.sendFile('index.html', { root: 'public' });
+});
+
+app.get('/bookcase', (req, res) => {
+    const bookcaseId = req.query.id;
+    res.set({'id': bookcaseId});
+    res.sendFile('Budka.html', { root: 'public' });
 });
 
 app.get('/api/books/isbn', async (req, res) => {
     const isbn = req.query.isbn;
+    const bookcaseId = req.query.id;
     try {
         const response = await fetch(`https://www.knihovny.cz/api/v1/search?lookfor=isbn:${isbn}&field[]=authors&field[]=title&field[]=humanReadablePublicationDates&field[]=bibliographicLevel&field[]=physicalDescriptions&sort=relevance&limit=2`);
         if (!response.ok) {
@@ -120,6 +128,7 @@ app.get('/api/books/isbn', async (req, res) => {
                     
 app.post('/api/books/add', async (req, res) => {
     try {
+        const bookcaseId = req.body.bookcaseId;
         const { surname } = req.body;
         const { name } = req.body;
         const { title } = req.body;
@@ -134,6 +143,7 @@ app.post('/api/books/add', async (req, res) => {
                 title: title,
                 year: year,
                 isbn: isbn,
+                bookcaseId: bookcaseId
             }
         });
          res.status(201).json(book);
@@ -145,10 +155,11 @@ app.post('/api/books/add', async (req, res) => {
 app.put('/api/books/update', async (req, res) => {
     // Update book in database
     const { id, surname, name, title, year, isbn } = req.body;
+    const bookcaseId = req.query.id;
     // Your update logic here
     const updatedItem = await prisma.books.update({
         where: { bookId: Number(id) },
-        data: {surname: surname, name: name, title: title, year: year, isbn: isbn },
+        data: {surname: surname, name: name, title: title, year: year, isbn: isbn, bookcaseId: bookcaseId},
     })
     res.status(200).json({ message: 'Book updated', book: updatedItem})
 });
@@ -169,8 +180,9 @@ app.delete('/', async (req, res) => {
 
 app.get('/api/books/show', async (_req, res) => {
     try {
+        const bookcaseId = _req.query.id;
         const currentBooks = await prisma.books.findMany({
-            where: { deleted: false },
+            where: { deleted: false, bookcaseId: Number(bookcaseId) },
             orderBy: { surname: 'asc' },
         })
         res.status(200).json(currentBooks);

@@ -11,20 +11,11 @@ datasource db {
 
 model books {
   bookId     Int       @id @default(autoincrement())
-  shelfId    Int
+  bookcaseId Int
   surname    String
   name       String
   title      String
   year       String
   isbn       String
-  deleted    Boolean   @default(false)
-}
-
-model bookshelfs {
-  shelfId    Int       @id @default(autoincrement())
-  osmId      String
-  ownerMail  String
-  capacity   Int
-  occupancy  Int
   deleted    Boolean   @default(false)
 }
