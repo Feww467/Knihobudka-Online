@@ -111,7 +111,7 @@ app.get('/api/books/isbn', async (req, res) => {
                         console.log(author);
                         if ((author.split(', ')[0]).split(' ').length > 1) {
                             book.surname = ((author.split(', ')[0]).split(' ').slice(-1)).join(' ');
-                            book.name = ((author.split(', '))[1])}
+                            book.name = ((author.split(', ')[0]).split(' ').slice(0,-1).join(' '))}
                         else {
                             book.surname = author.split(', ')[0];
                             book.name = " ";}
@@ -139,12 +139,12 @@ app.post('/api/books/add', async (req, res) => {
         
         const book = await prisma.books.create({
             data: {
+                bookcaseId: bookcaseId,
                 surname: surname,
                 name: name,
                 title: title,
                 year: year,
                 isbn: isbn,
-                bookcaseId: bookcaseId
             }
         });
          res.status(201).json(book);
