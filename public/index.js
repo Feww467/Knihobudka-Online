@@ -34,8 +34,7 @@ function updateMarkers(leafletMap) {
         .forEach(node => {
           const name = node.tags?.name || 'Knihobudka';
           const capacity = node.tags?.capacity ? `<br>Kapacita: ${node.tags.capacity}` : '<br>Neznámá kapacita';
-          const osmLink = `<a href="/bookcase?id=${node.tags?.['@id']?.split('/')[1]}>${name}</a>`;
-
+          const osmLink = `<a href="/bookcase?id=${node.tags?.['@id']?.split('/')[1]}>${name}</a>`
             L.marker([node.lat, node.lon])
                 .addTo(markerLayer)
                 .bindPopup(`${osmLink}${capacity}`);
