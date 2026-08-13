@@ -139,6 +139,7 @@
                     bookTitle.innerHTML = title;
                     datePublished.innerHTML = yearPublished;
                     bookIsbn.innerHTML = isbn;
+                    year = Number(yearPublished)
                     const response = await fetch(baseURL+"/api/books/add", {
                         method: 'POST',
                         headers: {
@@ -149,7 +150,7 @@
                             surname: surname,
                             name: name,
                             title: title,
-                            year: Number(yearPublished),
+                            year: year,
                             isbn: isbn
                         })
                     })
