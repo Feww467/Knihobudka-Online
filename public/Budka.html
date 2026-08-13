@@ -49,10 +49,10 @@
         <script>
             const params = new URLSearchParams(window.location.search);
             const bookcaseId = params.get('id');
-            const title = params.get('name')
+            const title = params.get('title')
             titleElement = document.getElementById("title")
             titleElement.innerHTML = title
-            const baseURL = 'http://localhost:3000';
+            const baseURL = 'https://www.knihobudka-online.cz/';
             async function loadBooksIntoTable() {
                 const table = document.getElementById('table');
                 try {

@@ -57,7 +57,10 @@ app.get('/', (req, res) => {
 
 app.get('/bookcase', (req, res) => {
     const bookcaseId = req.query.id;
-    res.set({'id': bookcaseId});
+    const title = req.query.title;
+    res.set({'id': bookcaseId,
+        'title': title
+    });
     res.sendFile('Budka.html', { root: 'public' });
 });
 
