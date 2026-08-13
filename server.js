@@ -133,7 +133,7 @@ app.post('/api/books/add', async (req, res) => {
         const { surname } = req.body;
         const { name } = req.body;
         const { title } = req.body;
-        const { year } = req.body;
+        const { year } = Number(req.body);
         const { isbn } = req.body;
         console.log('Creating book:', title);
         
