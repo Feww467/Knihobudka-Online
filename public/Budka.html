@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="Budka.css">
     </head>
     <body onload="loadBooksIntoTable()">
-        <h1>Knihobudka Čtyřkoly</h1>
+        <h1 id="title"></h1>
         <div>
             <form id="addBookForm">
                 <div class="form-row">
@@ -45,10 +45,13 @@
                 </tr>
             </table>
         </div>
-        <script src="index.js"></script>
+        <script src="Budka.js"></script>
         <script>
             const params = new URLSearchParams(window.location.search);
             const bookcaseId = params.get('id');
+            const title = params.get('name')
+            titleElement = document.getElementById("title")
+            titleElement.innerHTML = title
             const baseURL = 'http://localhost:3000';
             async function loadBooksIntoTable() {
                 const table = document.getElementById('table');
