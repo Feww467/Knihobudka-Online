@@ -111,7 +111,7 @@ app.get('/api/books/isbn', async (req, res) => {
                         console.log(author);
                         if ((author.split(', ')[0]).split(' ').length > 1) {
                             book.surname = ((author.split(', ')[0]).split(' ').slice(-1)).join(' ');
-                            book.name = ((author.split(', ')[0]).split(' ').slice(0,-1).join(' '))}
+                            book.name = ((author.split(', ')[0]).split(' ').slice(0,-1)).join(' ')}
                         else {
                             book.surname = author.split(', ')[0];
                             book.name = " ";}
