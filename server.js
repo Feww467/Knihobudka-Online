@@ -179,9 +179,9 @@ app.delete('/', async (req, res) => {
     }
 });
 
-app.get('/api/books/show', async (_req, res) => {
+app.get('/api/books/show', async (req, res) => {
     try {
-        const bookcaseId = _req.query.id;
+        const bookcaseId = req.query.bookcaseId
         const currentBooks = await prisma.books.findMany({
             where: { deleted: false, bookcaseId: Number(bookcaseId) },
             orderBy: { surname: 'asc' },

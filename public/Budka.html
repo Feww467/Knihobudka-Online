@@ -56,7 +56,7 @@
             async function loadBooksIntoTable() {
                 const table = document.getElementById('table');
                 try {
-                    const response = await fetch(baseURL+`/api/books/show?id=${bookcaseId}`, {
+                    const response = await fetch(baseURL+`/api/books/show?bookcaseId=${bookcaseId}`, {
                         method: 'GET',
                         headers: {
                             "Content-Type": 'application/json'
