@@ -129,7 +129,7 @@ app.get('/api/books/isbn', async (req, res) => {
                     
 app.post('/api/books/add', async (req, res) => {
     try {
-        const bookcaseId = req.body.bookcaseId;
+        const { bookcaseId } = req.body.bookcaseId;
         const { surname } = req.body;
         const { name } = req.body;
         const { title } = req.body;
