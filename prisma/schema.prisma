@@ -10,7 +10,7 @@ datasource db {
 }
 
 model books {
-  bookId     Int       @id @default(autoincrement())
+  bookId     BigInt       @id @default(autoincrement())
   bookcaseId BigInt
   surname    String
   name       String
