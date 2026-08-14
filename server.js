@@ -139,7 +139,7 @@ app.post('/api/books/add', async (req, res) => {
         
         const book = await prisma.books.create({
             data: {
-                bookcaseId: bookcaseId,
+                bookcaseId: bookcaseId.toString(),
                 surname: surname,
                 name: name,
                 title: title,
