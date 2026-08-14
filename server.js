@@ -5,6 +5,10 @@ import { all } from 'proxy-addr';
 import cors from 'cors';
 import { id } from 'effect/Fiber';
 
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 const app = express();
 const port = 3000;
 const prisma = new PrismaClient();
@@ -139,7 +143,7 @@ app.post('/api/books/add', async (req, res) => {
         
         const book = await prisma.books.create({
             data: {
-                bookcaseId: bookcaseId.toString(),
+                bookcaseId: bookcaseId,
                 surname: surname,
                 name: name,
                 title: title,
