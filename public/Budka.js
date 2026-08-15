@@ -104,7 +104,6 @@ function scanBooks() {
                 },  // Sets dimensions of scanning box (set relative to reader element width)
                 fps: 20, // Frames per second to attempt a scan
             });
-            scanner.render(success, error);
             function stopScanning() {
                 isScanning = false;
                 // Fully clear the scanner instance before allowing a restart
