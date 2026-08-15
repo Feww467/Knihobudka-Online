@@ -109,7 +109,7 @@ function scanBooks() {
                 document.getElementById('scanning').innerHTML = '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
                 return;
             }
-            button = document.getElementById('html5-qrcode-button-camera-stop')
+            const button = document.getElementById('html5-qrcode-button-camera-stop')
             button.onclick = {stopScanning}
             // Starts scanner
             function success(result) {
