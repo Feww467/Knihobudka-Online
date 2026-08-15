@@ -110,7 +110,7 @@ function scanBooks() {
                 return;
             }
             button = document.getElementById('html5-qrcode-button-camera-stop')
-            button.onclick = function() {stopScanning()}
+            button.onclick = {stopScanning}
             // Starts scanner
             function success(result) {
             if (isbn == String(result)) {
