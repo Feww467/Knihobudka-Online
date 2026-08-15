@@ -106,15 +106,9 @@ function scanBooks() {
             });
             function stopScanning() {
                 isScanning = false;
-                // Fully clear the scanner instance before allowing a restart
-                scannerInstance.clear().then(() => {
-                    document.getElementById('scanning').innerHTML =
-                        '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
-                }).catch(err => {
-                    console.error("Failed to clear scanner cleanly:", err);
-                    document.getElementById('scanning').innerHTML =
-                        '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
-                });
+                document.getElementById('scanning').innerHTML =
+                    '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
+                };
             }
             // Starts scanner
             function success(result) {
