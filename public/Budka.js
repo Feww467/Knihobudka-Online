@@ -109,8 +109,6 @@ function scanBooks() {
                 document.getElementById('scanning').innerHTML = '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
                 return;
             }
-            const button = document.getElementById('html5-qrcode-button-camera-stop')
-            button.onclick = stopScanning
             // Starts scanner
             function success(result) {
             if (isbn == String(result)) {
@@ -125,4 +123,6 @@ function scanBooks() {
                 console.error(err);
                 // Prints any errors to the console
             }
+            const button = document.getElementById('html5-qrcode-button-camera-stop')
+            button.onclick = stopScanning
         }
