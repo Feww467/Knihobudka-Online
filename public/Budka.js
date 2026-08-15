@@ -95,6 +95,7 @@ async function addBookByISBN(isbn) {
 
 function scanBooks() {
             document.getElementById('scanning').innerHTML = '<div id="scanner"></div>';
+            const isbn
             const scanner = new Html5QrcodeScanner('scanner', { 
                 // Scanner will be initialized in DOM inside element with id of 'reader'
                 qrbox: {
@@ -112,6 +113,8 @@ function scanBooks() {
             button.onclick = function() {stopScanning()}
             // Starts scanner
             function success(result) {
+            if (isbn == String(result)) {
+                return}
             isbn = String(result)
                if (isValidISBN(isbn) == false) { //Calls a function, which returns, whether the ISBN provided is valid
                         alert('ISBN není validní');
