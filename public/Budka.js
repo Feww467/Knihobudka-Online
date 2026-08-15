@@ -95,7 +95,7 @@ async function addBookByISBN(isbn) {
 
 function scanBooks() {
             document.getElementById('scanning').innerHTML = '<div id="scanner"></div>';
-            const isbn
+            var isbn = ""
             const scanner = new Html5QrcodeScanner('scanner', { 
                 // Scanner will be initialized in DOM inside element with id of 'reader'
                 qrbox: {
