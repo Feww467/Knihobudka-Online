@@ -109,7 +109,6 @@ function scanBooks() {
                 document.getElementById('scanning').innerHTML =
                     '<button type="button" id="scanBooksButton" onclick="scanBooks()">Skenovat knihy</button>';
                 };
-            }
             // Starts scanner
             function success(result) {
             if (isbn == String(result)) {
