@@ -123,6 +123,5 @@ function scanBooks() {
                 console.error(err);
                 // Prints any errors to the console
             }
-            const button = document.getElementById('html5-qrcode-button-camera-stop')
-            button.onclick = stopScanning
+            document.getElementById('html5-qrcode-button-camera-stop').onclick = stopScanning
         }
