@@ -103,30 +103,14 @@
                 var yearPublished = Elements.elements["yearPublished"].value;
                 var isbn = Elements.elements["isbn"].value;
 
-                if (!title || !surname || !name || !yearPublished) {
-                    if (isbn) {
-                        const getBook = await fetch(`/api/books/isbn?isbn=${isbn}&id=${bookcaseId}`)
-                        book = await getBook.json();
-                        console.log(book);
-                        if (!book.name) {
-                            book.name = "";
-                        }
-                        if (!book.surname) {
-                            book.surname = book.name;
-                            book.name = "";
-                        }
-                        surname = book.surname;
-                        name = book.name;
-                        title = book.title;
-                        yearPublished = book.yearPublished;
-                        if (!title || !surname || !name || !yearPublished) {
-                            alert('Přidání knihy podle ISBN se nezdařilo. Zkontrolujte prosím zadané ISBN nebo vyplňte všechna pole ručně.');
-                            return}
-                    }
-                    else {
-                    alert('Vyplňte všechna pole nebo zadejte ISBN pro automatické vyplnění');
-                    return; // Stop the function
-                    }}
+                if (isValidISBN(isbn) == false) { //Calls a function, which returns, whether the ISBN provided is valid
+                        alert('ISBN není validní');
+                        return}
+                
+                if (!title || !surname || !name || !yearPublished) { // If any of the fields are empty, try to fetch book data using the provided ISBN
+                    addBookByISBN(isbn);
+                    return;
+                }
                 try {
                     var row = table.insertRow(-1);
                     var bookSurname = row.insertCell(0);

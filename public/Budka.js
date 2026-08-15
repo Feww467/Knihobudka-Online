@@ -77,6 +77,7 @@ async function addBookByISBN(isbn) {
                             "Content-Type": 'application/json'
                         },
                         body: JSON.stringify({
+                            bookcaseId: bookcaseId,
                             surname: surname,
                             name: name,
                             title: title,
