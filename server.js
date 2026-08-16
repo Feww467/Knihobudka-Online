@@ -68,14 +68,19 @@ app.get('/bookcase', (req, res) => {
 
 app.get('/api/books/isbn', async (req, res) => {
     const isbn = req.query.isbn;
-    const bookcaseId = req.query.id;
     try {
-        const response = await fetch(`https://www.knihovny.cz/api/v1/search?lookfor=isbn:${isbn}&field[]=authors&field[]=title&field[]=humanReadablePublicationDates&field[]=bibliographicLevel&field[]=physicalDescriptions&sort=relevance&limit=2`);
+        const response = await fetch(`https://www.knihovny.cz/api/v1/search?lookfor=isbn:${isbn}&field[]=authors&field[]=title&field[]=humanReadablePublicationDates&field[]=bibliographicLevel&field[]=physicalDescriptions&sort=relevance&limit=2`,{
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        }
+    });
         console.log(response)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log(data)
         if (data.records && data.records.length > 0) {
             const book = data.records[0];
             book.surname = (authorsSplit(book.authors)).surname;
