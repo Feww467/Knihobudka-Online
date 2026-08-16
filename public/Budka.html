@@ -194,6 +194,7 @@
                         },
                         body: JSON.stringify({
                             id: bookId,
+                            bookcaseId: bookcaseId,
                             ...updatedData
                         })
                     });
@@ -216,9 +217,7 @@
                     }
                 } catch (error) {
                     alert('Chyba při ukládání změn. Zkuste to prosím znovu.');
-                    console.error('Error saving changes:', error);
-                    cancelEditing(button);
-                }
+                    console.error('Error saving changes:', error);                }
             }
             function searchBooks(query) {
                 const table = document.getElementById('table');
