@@ -1,10 +1,12 @@
 /* Variables */
 
 :root {
-  --blue: blue;
-  --red: red;
+  --blue: #4a90e2;
+  --red: #dc3545;
   --grey: grey;
   --orange: orange;
+  --white: white;
+  --green: #28a745;
 }
 
 #map { 
@@ -213,7 +215,7 @@ tr:last-child td {
     border-bottom: none;
 }
 
-/* Button styling in table */
+/* Button styling in table 
 button {
     padding: 8px 12px;
     margin: 2px;
@@ -222,7 +224,7 @@ button {
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
-}
+}*/
 
 /* Edit button - Blue */
 .editButton {
@@ -246,7 +248,7 @@ button {
     transform: scale(0.95);
 }
 
-/* Delete button - Red */
+/* Delete button - Red 
 button:not(.editButton):not(.saveButton) {
     background-color: #dc3545;
     color: white;
@@ -255,7 +257,7 @@ button:not(.editButton):not(.saveButton) {
 button:not(.editButton):not(.saveButton):active {
     background-color: #c82333;
     transform: scale(0.95);
-}
+}*/
 
 /* Input styling in edit mode */
 td input {
