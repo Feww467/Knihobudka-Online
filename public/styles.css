@@ -20,7 +20,7 @@
     display: none
  }
 #mapButton {
-    background-color: blue;
+    background-color: var(--blue);
     color: white;
     margin-right: 0;
 }
@@ -106,7 +106,7 @@ h1 {
 
 #addBookForm input:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: var(--blue);
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
@@ -122,7 +122,7 @@ h1 {
     cursor: pointer;
 }
 #addBookForm button,#scanBooksButton {
-    background-color: #4a90e2;
+    background-color: var(--blue);
 }
 #scanning #stopScanningButton {
     background-color: #dc3545;
@@ -228,7 +228,7 @@ button {
 
 /* Edit button - Blue */
 .editButton {
-    background-color: #4a90e2;
+    background-color: var(--blue);
     color: white;
 }
 
@@ -384,7 +384,7 @@ tr td[colspan] {
 
 /* Focus styles for accessibility */
 button:focus, input:focus {
-    outline: 2px solid #4a90e2;
+    outline: 2px solid var(--blue);
     outline-offset: 2px;
 }
 
