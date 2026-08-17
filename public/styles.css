@@ -131,14 +131,14 @@ h1 {
     background-color: #357abd;
     transform: scale(0.98);
 }
-/* Table container 
+/* Table container*/
 table div:last-child {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     background: white;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}*/
+}
 
 /* Table styling */
 table {
